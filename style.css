@@ -1,9 +1,30 @@
-body 
-{
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+
+body {
+    height: 100%;
     font-family: Lato, Helvetica;
-    color: #FFF;
+    margin: 0px;
 }
+
+.background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: url(https://source.unsplash.com/category/nature/1600x900) 0% 0% / cover;
+}
+
+.weather {
+    background-color: rgba(130, 160, 126, 0.701961);
+    width: 70px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: right;
+    font-size: 1.5em;
+    color: white;
+}
+
+.weather p {
+    margin: 5px;
+}
+
