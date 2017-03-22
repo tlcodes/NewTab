@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "newTab",
+    "version": "1.0",
+    "description": "A new tab extension for Google Chrome",
+    //"icons": {our own icon file and size}
+    "chrome_url_overrides": {
+        "newtab": "ournewtab.html"
+    }
+}
