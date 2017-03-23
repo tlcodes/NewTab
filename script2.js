@@ -18,8 +18,8 @@ if(navigator.geolocation) {
       var fahr = Math.round(json.main.temp);
       var cels = Math.round((json.main.temp - 32) / 1.8);
       var condition = json.weather[0].main;
-      // for more precise description (such as 'scattered clouds' instead of 'Clouds'):
-      // json.weather[0].condition;
+      // for more precise description (such as 'scattered clouds' instead of 'Clouds'), use:
+      // json.weather[0].description;
       var location = json.name + ', ' + json.sys.country;
       
       $weather.append($('<p>').text(location));
