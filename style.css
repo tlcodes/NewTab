@@ -14,7 +14,6 @@ body {
 
 .weather {
     background-color: rgba(130, 160, 126, 0.701961);
-    width: 200px;
     border-bottom-left-radius: 10px;
     position: absolute;
     top: 0px;
@@ -28,3 +27,18 @@ body {
     margin: 5px;
 }
 
+.time {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 8em;
+    color: white;
+}
+
+.date {
+    font-size: 0.5em;
+    
+}
