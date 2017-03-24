@@ -4,7 +4,8 @@
     "version": "1.0",
     "description": "A new tab extension for Google Chrome",
    "permissions" : [
-	"geolocation"
+	"geolocation",
+	"storage"
 	],
     "chrome_url_overrides": {
         "newtab": "ournewtab.html"
