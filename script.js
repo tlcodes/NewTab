@@ -2,7 +2,8 @@ $(function() {
 
 var $weather = $('.weather');    
 var goalInput = $('.mainForm input');
-var $timediv = $('.time');
+var $clock = $('.clock');
+var $datep = $('.date');
 
 if(navigator.geolocation) { 
   navigator.geolocation.getCurrentPosition(function(position) { 
@@ -26,7 +27,7 @@ if(navigator.geolocation) {
       
       var $icon = $("<img src='http://openweathermap.org/img/w/" + json.weather[0].icon + ".png'>")
       $weather.append($icon);
-      $weather.append($('<p>').text(cels + '\u00B0 C'));
+      $weather.append($('<p>').html(cels + '\u00B0 C'));
 //      $weather.append($('<p>').text(condition));
       $weather.append($('<p>').text(location));
 
@@ -60,6 +61,11 @@ $('.mainForm').on('submit', saveMainGoal);
                       storageChange.newValue);
         }
       });
+
+var myVar = setInterval(function() {
+  theTime();
+}, 1000);    
+function theTime() {
       
     var now = new Date();
     var date = now.getDate();
@@ -70,14 +76,25 @@ $('.mainForm').on('submit', saveMainGoal);
     var hours = now.getHours();
     var minutes = now.getMinutes();
     
-    var $datediv = $('<p>').text(today + ', ' + month + '/' + date);
-    $datediv.addClass('date');
-    var $clock = $('<p>').text(hours + ':' + minutes);
+    if (month < 10)
+        {
+            month = '0' + month;
+        }
+    if (date < 10)
+        {
+            date = '0' + date;
+        }
+    if (minutes < 10)
+        {
+            minutes = '0' + minutes;
+        }
+    
+    $datep.html(today + ', ' + month + '/' + date);
+    $datep.addClass('date');
+    $clock.html(hours + ':' + minutes);
     $clock.addClass('clock');
-    
-    $timediv.append($datediv);
-    $timediv.append($clock);
-    
-    
+
+    }
+   
 
 });
