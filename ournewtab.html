@@ -13,14 +13,27 @@
     <body>
 	<!--<div class="background"></div>-->
 	<div class="weather"></div>
-    <div class="time">
+	<div class="time">
         <p class="date"></p>
         <p class="clock"></p>
-    </div>
-        
-	<p class="goalPrompt">What is your goal for today?</p>
+	 </div>
+	 <div class="todaysGoal">
+	 <div class="goalPrompt">
+	<p>What is your goal for today?</p>
 	<form class="mainForm">
-	<input type="text" name="goal" placeholder="_________________________________" autofocus>
+	<input type="text" name="goal" placeholder="_________________________________" autocomplete="off">
 	</form>
+	</div>
+	<div class="submittedGoalContainer">
+	<p>My goal for today:</p>
+	<fieldset>
+		<p>
+		<input type="checkbox" id="submittedGoal" value="">
+		<label for="submittedGoal"><span>Dummy</span></label>
+		<button type="button" id="removeDailyGoal">x</button>
+		</p>
+	</fieldset>
+        </div>
+	</div>
     </body>
 </html>
