@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-            <title>New Tab</title>
-            <link rel="stylesheet" href="style.css">
-            <link rel="stylesheet"
-        href="http://fonts.googleapis.com/css?family=Lato:100,300,400">
-	<script src="jquery-3.2.0.min.js"></script>
-	<script src="script.js"></script>
-    </head>
-
-    <body>
-	<!--<div class="background"></div>-->
-	<div class="weather"></div>
-	<div class="time">
-        <p class="date"></p>
-        <p class="clock"></p>
-	 </div>
-	 <div class="todaysGoal">
-	 <div class="goalPrompt">
-	<p>What is your goal for today?</p>
-	<form class="mainForm">
-	<input type="text" name="goal" placeholder="_________________________________" autocomplete="off">
-	</form>
-	</div>
-	<div class="submittedGoalContainer">
-	<p>My goal for today:</p>
-	<fieldset>
-		<p>
-		<input type="checkbox" id="submittedGoal" value="">
-		<label for="submittedGoal"><span>Dummy</span></label>
-		<button type="button" id="removeDailyGoal">x</button>
-		</p>
-	</fieldset>
-        </div>
-	</div>
-    </body>
+<head>
+  <meta charset="utf-8">
+  <title>New Tab</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:100,300,400">
+  <script src="jquery-3.2.0.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="weather"></div>
+  <div class="time">
+    <p class="date"></p>
+    <p class="clock"></p>
+  </div>
+  <div class="todaysGoal">
+    <div class="goalPrompt">
+      <p>What is your goal for today?</p>
+      <form class="mainForm">
+        <input type="text" name="goal" placeholder="_________________________________" autocomplete="off">
+      </form>
+    </div>
+    <div class="submittedGoalContainer">
+      <p>My goal for today:</p>
+      <fieldset>
+        <p>
+          <input type="checkbox" id="submittedGoal" value="">
+          <label for="submittedGoal"><span>Dummy</span></label>
+          <button type="button" id="removeDailyGoal">x</button>
+        </p>
+      </fieldset>
+    </div>
+  </div>
+</body>
 </html>
