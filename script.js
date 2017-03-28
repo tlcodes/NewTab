@@ -31,7 +31,7 @@ if(navigator.geolocation) {
       //var $icon = "<img src='http://openweathermap.org/img/w/" + json.weather[0].icon + ".png'>";
       // $weather.append($icon);
  //     $('.temp').html($icon + ' ' + cels + '\u00B0 C');
-      $weather.append($('<p>').html($icon + ' ' + cels + '\u00B0 C'));
+      $weather.append($('<p>').html($icon + cels + '\u00B0 C'));
 //      $weather.append($('<p>').text(condition));
       $weather.append($('<p>').text(location));
 
