@@ -32,7 +32,6 @@ body {
 }
 
 .weather img {
-   /position: absolute;
     width: 40px;
     vertical-align: middle;
     top: 0;
