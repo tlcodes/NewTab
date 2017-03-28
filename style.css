@@ -17,8 +17,8 @@ body {
     background: url("https://source.unsplash.com/category/nature/1600x900") no-repeat center center fixed;
     font-family: Lato, Helvetica;
     background-size: cover;
-
     color: white;
+    text-shadow: 1px 1px 5px slategray;
 }
 .weather {
  /*   background-color: rgba(130, 160, 126, 0.701961); */
