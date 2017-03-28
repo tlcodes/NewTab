@@ -14,12 +14,12 @@ body {
 }
 */
 body {
-    background: url("https://source.unsplash.com/category/nature/1600x900/") no-repeat center center fixed;
+    background: url("https://source.unsplash.com/category/nature/1600x900") no-repeat center center fixed;
     font-family: Lato, Helvetica;
     background-size: cover;
+
     color: white;
 }
-
 .weather {
  /*   background-color: rgba(130, 160, 126, 0.701961); */
     border-bottom-left-radius: 10px;
@@ -32,8 +32,8 @@ body {
 }
 
 .weather img {
-    position: absolute;
     width: 40px;
+    vertical-align: middle;
     top: 0;
     left: 0;
 }
@@ -63,6 +63,13 @@ body {
 }
 
 .goalPrompt {
+    display: none;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.goalPrompt > p,
+.submittedGoalContainer > p {
     font-size: 2em;
     text-align:center;
 }
@@ -73,7 +80,7 @@ body {
 }
 
 .mainForm input{    
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(80, 80, 95, 0.5);
     width: 100%;
     height: 2em;
     color: white;
@@ -91,12 +98,161 @@ body {
 }
 
 /* 
-	override default colors for input field when autofill is used
+	override default colors for input field when autofill is used -- NOT NEEDED anymore b/c autocomplete is disabled now
 */
+
+/*
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: white !important;
+}
+*/
+/*
+@-webkit-keyframes autofill {
+    to {
+    color: white;
+    background: rgba(255, 255, 255, 0.5)
+    }
+}
+
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}
+*/
+
+.submittedGoalContainer {
+    display: none;
+    opacity: 0;
+    text-align: center;
+    transition: opacity 1s;
+}
+
+.submittedGoalContainer fieldset {
+    border: none;
+}
+
+.submittedGoalContainer fieldset p {
+  position: relative;
+  display: inline-block;
+  max-width: 90%;
+  font-size: 1.4em;
+/*   margin: 5px; */  
+}
+
+/* Set default opacity for checkbox to 0 to display custom checkbox instead */
+
+.submittedGoalContainer input[type="checkbox"] {
+  opacity: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.submittedGoalContainer input[type="checkbox"] + label {
+  cursor: pointer;  
+  margin-left: 24px;
+  display: inline-block;  
+}
+
+/* Using ::before and ::after pseudo-elements to customize checkbox appearance */
+
+.submittedGoalContainer input[type="checkbox"] + label::before {
+  top: 3px;
+  position: absolute;
+  left: -3px;
+  width: 20px;
+  height: 20px;
+  /* background-color: white; */
+  border-radius: 5px;
+  display: inline-block;
+  content: "";
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+
+/* unchecked state */
+.submittedGoalContainer input[type="checkbox"] + label::after {
+  position: absolute;
+  top: 6px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaDike3R8gLgAAAIlJREFUSMftljEOwCAMAzHi/192p24FkjSGqiITYuAUfEGAZNlRtWyqA/4NuGtuWwC811B3TMt+XXW1yoy5Qy7389eMByET2uuYUWEmNbSajs7C0EjGzIBG5XoNfQIjcbzglQtq6OiqoYTOMoYKapELCqjVamRDPeOE5Ehcc4xMCZtKnvPL/Az4Aj05Fj+Wh7yCAAAAAElFTkSuQmCC");
+  border-radius: 4px;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: -2px -1px;
+  display: inline-block;
+  content: "";
+  opacity: 0;
+  max-width: 0;
+  cursor: pointer;
+  transition: max-width 0s 0.5s, opacity 0.5s;
+  /* transition-delay: 1s; */
+  /* transition: opacity, max-width; */
+}
+
+/* checked state */
+.submittedGoalContainer input[type="checkbox"]:checked + label::after {
+  opacity: 1;
+  transition: all 0.5s;
+  max-width: 20px;
+}
+
+.submittedGoalContainer input[type="checkbox"]:checked + label > span {
+    text-decoration: line-through;
+}
+
+.submittedGoalContainer input[type="checkbox"] + label > span {    
+    vertical-align: middle;
+    font-size: 1.4em;
+}
+
+/* Remove default button styling */
+
+button {
+  background: inherit;
+  border: 0;
+  color: black;
+  /* cursor: default; */
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  padding: 0;
+  -webkit-appearance: button;
+  -webkit-user-select: none;
+}
+
+/* Customize button appearance */
+
+.submittedGoalContainer button {
+  color: white;  
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  border: 1px solid white;
+  padding: 3px 8px 3px 8px;
+  color: inherit;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: -46px;
+}
+
+/* Show the button on hover */
+
+.submittedGoalContainer fieldset:hover button {
+    visibility: visible;
+}
+
+
+/* remove the default blue outline on focus on the input element */
+input:focus{
+    outline: none;
 }
