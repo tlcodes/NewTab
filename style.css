@@ -57,6 +57,21 @@ body {
     margin: 0;
 }
 
+.usclock {
+    font-size: 8em; 
+    margin: 0;
+}
+
+.ampm {
+    vertical-align: middle;
+    font-size: 0.3em;
+}
+
+.showhide {
+  visibility: hidden;
+  height: 0px;
+}
+
 .date {
     font-size: 2em;
     margin: 0;

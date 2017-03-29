@@ -3,6 +3,7 @@ $(function() {
   var $weather = $('.weather');
   var $goalInput = $('.mainForm input');
   var $clock = $('.clock');
+  var $usClock = $('.usclock');
   var $datep = $('.date');
   var $quote = $('blockquote');
 
@@ -111,12 +112,25 @@ $.getJSON(call, function(quote) {
     var day = now.getDay();
     var today = dayNames[day];
     var month = padZero(now.getMonth() + 1);
+
     var hours = padZero(now.getHours());
     var minutes = padZero(now.getMinutes());
-
+      
+      //12 hour clock variables
+    var ampm = hours >= 12 ? 'PM' : 'AM';  
+    var usHours = padZero(hours % 12) || 12;
+      
     $datep.html(today + ', ' + month + '/' + date);
     $clock.html(hours + ':' + minutes);
+    $usClock.html(usHours + ':' + minutes);
+    $usClock.append($('<span>').addClass('ampm').text(ampm));
+      
   }
+// Toggle clock to 12 and 24 hour mode
+ $(".time").on("click", function() {
+     $clock.toggleClass("showhide");
+     $usClock.toggleClass("showhide");
+   });
 
   // on page load, check if there is previous text stored
   chrome.storage.sync.get('mainGoal', function(obj) {
