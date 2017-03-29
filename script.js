@@ -6,6 +6,7 @@ $(function() {
   var $usClock = $('.usclock');
   var $datep = $('.date');
   var $quote = $('blockquote');
+  //var visible = $clock.hasClass('hide');
 
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -126,12 +127,20 @@ $.getJSON(call, function(quote) {
     $usClock.append($('<span>').addClass('ampm').text(ampm));
       
   }
+    
 // Toggle clock to 12 and 24 hour mode
- $(".time").on("click", function() {
-     $clock.toggleClass("showhide");
-     $usClock.toggleClass("showhide");
+ $('.time').on('click', function() {
+     // get the clock status and store it first
+     var visible = $clock.hasClass('hide');
+     chrome.storage.sync.set({'visible24': visible});
+     
+     $clock.toggleClass('hide');
+     $usClock.toggleClass('hide');
+
    });
 
+    
+    
   // on page load, check if there is previous text stored
   chrome.storage.sync.get('mainGoal', function(obj) {
     if(obj.mainGoal) {                         // if there is already a stored text, display it
@@ -140,5 +149,16 @@ $.getJSON(call, function(quote) {
     } else {      // otherwise, display the prompt
       $('.goalPrompt').css({'display' : 'block', 'opacity' : 1});
     }
+  });
+    
+    // on page load, check clock status and apply/remove 'hide' class
+  chrome.storage.sync.get('visible24', function(obj) {
+      if (!obj.visible24) {
+          $clock.addClass('hide');
+          $usClock.removeClass('hide');
+      } else {
+          $clock.removeClass('hide');
+          $usClock.addClass('hide');
+      }
   });
 });

@@ -67,7 +67,7 @@ body {
     font-size: 0.3em;
 }
 
-.showhide {
+.hide {
   visibility: hidden;
   height: 0px;
 }
