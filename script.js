@@ -43,7 +43,7 @@ var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.
 $.getJSON(call, function(quote) {
     var theQuote = quote.quoteText;
     var author = quote.quoteAuthor;
-    $quote.html('\u275D ' + theQuote + '\u275E' + '<br>');
+    $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
     $quote.append($('<cite>').text('\u007E' + author));
 });
 
