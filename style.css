@@ -18,7 +18,7 @@ body {
     font-family: Lato, Helvetica;
     background-size: cover;
     color: white;
-    text-shadow: 1px 1px 5px slategray;
+    text-shadow: 1px 1px 5px darkgray;
 }
 .weather {
  /*   background-color: rgba(130, 160, 126, 0.701961); */
@@ -255,4 +255,14 @@ button {
 /* remove the default blue outline on focus on the input element */
 input:focus{
     outline: none;
+}
+
+blockquote {
+    text-align: center;
+    font-size: 1.3em;
+    font-style: italic;
+}
+   
+blockquote cite {
+    font-size: 0.9em;
 }

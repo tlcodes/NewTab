@@ -4,6 +4,7 @@ $(function() {
   var $goalInput = $('.mainForm input');
   var $clock = $('.clock');
   var $datep = $('.date');
+  var $quote = $('blockquote');
 
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -36,6 +37,15 @@ $(function() {
     });
   }
 
+    // Quotes from forismatic
+    
+var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
+$.getJSON(call, function(quote) {
+    var theQuote = quote.quoteText;
+    var author = quote.quoteAuthor;
+    $quote.html('\u275D ' + theQuote + '\u275E' + '<br>');
+    $quote.append($('<cite>').text('\u007E' + author));
+});
 
   // $('.mainForm input').eq(0).focus();   // Chrome forbids the extensions that substitute the new tab page from grabbing focus from the omnibar
 
