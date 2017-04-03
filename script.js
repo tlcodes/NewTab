@@ -12,35 +12,45 @@ $(function() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var latitude = (position.coords.latitude);
       var longitude = (position.coords.longitude);
-      // var url = 'https://api.apixu.com/v1/current.json?key=981a4177d5834ae89f9180839172203&q=' + latitude + ',' + longitude;
+      
+      var yql = 'select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text="('+ latitude + ',' + longitude + ')")';
+      var url = "https://query.yahooapis.com/v1/public/yql?q=" + yql + "&format=json";
 
-      //API keys from OpenWeatherMap.com
-      var apikey = "54e8a43f5589a7c590f20fdd08aacde1";
-      //default key : a608afe2d88483c2a0197c42108a03c6
-      var url = "https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&type=accurate&units=imperial&APPID=" + apikey;
+      $.getJSON(url, function(weather) {
+             
+             var data = weather.query.results.channel.item.condition;
+             
+             // main data (condition, temp, icon, location)
+             var fahr = Math.round(data.temp);
+             var cels = Math.round((fahr - 32) / 1.8);
+             var condition = data.text;
+             var $icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
+             var location = weather.query.results.channel.location.city;
+          
+            $weather.prepend($('<p>').html($icon + cels + '\u00B0 C'));
+            $weather.prepend($('<p>').text(location));
+             
+             // 10 day forecast (array of objects)
+             var forecast = weather.query.results.channel.item.forecast;
+              // properties are code, date, day, high, low, text
+             console.log(forecast[0].text);
+    
+            for (var i = 0; i < forecast.length; i++) {
+                $(".forecast").append($('<tr>').html(
+                    '<td class="forecastDay">' + forecast[i].day + ' ' + forecast[i].date.substring(3,7) + forecast[i].date.substring(0,2) + '<br>' + forecast[i].text + '</td>' + 
+                    '<td>' + forecast[i].low + '</td>' + 
+                    '<td>' + forecast[i].high + '</td>' + 
+                    '<td>' + "<img src='http://l.yimg.com/a/i/us/we/52/" + forecast[i].code  + ".gif'></td>"
+                ));
+                //$weather.append($('<p>').html($icon + cels + '\u00B0 C'));
+            }
+        }); // end getJSON
 
-      $.getJSON(url, function(json) {
-
-        var fahr = Math.round(json.main.temp);
-        var cels = Math.round((json.main.temp - 32) / 1.8);
-        var condition = json.weather[0].main;
-        // for more precise description (such as 'scattered clouds' instead of 'Clouds'), use:
-        // json.weather[0].description;
-        var location = json.name;
-
-        var $icon = "<img src='http://openweathermap.org/img/w/" + json.weather[0].icon + ".png'>";
-        //var $icon = "<img src='http://openweathermap.org/img/w/" + json.weather[0].icon + ".png'>";
-        // $weather.append($icon);
-        //     $('.temp').html($icon + ' ' + cels + '\u00B0 C');
-        $weather.append($('<p>').html($icon + cels + '\u00B0 C'));
-        //      $weather.append($('<p>').text(condition));
-        $weather.append($('<p>').text(location));
       });
-    });
-  }
+    } // end navigator.gelocation
+  
 
     // Quotes from forismatic
-    
 var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
 $.getJSON(call, function(quote) {
     var theQuote = quote.quoteText;
@@ -116,17 +126,27 @@ $.getJSON(call, function(quote) {
 
     var hours = padZero(now.getHours());
     var minutes = padZero(now.getMinutes());
-      
+
       //12 hour clock variables
-    var ampm = hours >= 12 ? 'PM' : 'AM';  
-    var usHours = padZero(hours % 12) || 12;
-      
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    var usHours = now.getHours() % 12 || 12;
+
     $datep.html(today + ', ' + month + '/' + date);
     $clock.html(hours + ':' + minutes);
-    $usClock.html(usHours + ':' + minutes);
+    $usClock.html(padZero(usHours) + ':' + minutes);
     $usClock.append($('<span>').addClass('ampm').text(ampm));
-      
+
   }
+
+    // toggle weather forecast
+$('.weather').on('click', function() {
+     // get the clock status and store it first
+     // var visible = $clock.hasClass('hide');
+     // chrome.storage.sync.set({'visible24': visible});
+    $('.weatherForecast').fadeToggle(1000);
+     
+
+   });    
     
 // Toggle clock to 12 and 24 hour mode
  $('.time').on('click', function() {
@@ -139,8 +159,8 @@ $.getJSON(call, function(quote) {
 
    });
 
-    
-    
+
+
   // on page load, check if there is previous text stored
   chrome.storage.sync.get('mainGoal', function(obj) {
     if(obj.mainGoal) {                         // if there is already a stored text, display it
@@ -150,7 +170,7 @@ $.getJSON(call, function(quote) {
       $('.goalPrompt').css({'display' : 'block', 'opacity' : 1});
     }
   });
-    
+
     // on page load, check clock status and apply/remove 'hide' class
   chrome.storage.sync.get('visible24', function(obj) {
       if (!obj.visible24) {

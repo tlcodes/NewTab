@@ -32,7 +32,7 @@ body {
 }
 
 .weather img {
-    width: 40px;
+    width: 30px;
     vertical-align: middle;
     top: 0;
     left: 0;
@@ -40,10 +40,44 @@ body {
 
 .weather p:first-of-type {
     margin-top: 30px;
+    text-transform: uppercase;
 }
 
 .weather p {
     margin: 5px;
+}
+
+.weatherForecast {
+    font-size: 0.8em;
+    margin-right: 5px;
+    display: none;
+    background: rgba(80, 80, 95, 0.5);
+    border: none;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+.weather table {
+    border-collapse: collapse;
+}
+
+.weather td {
+    text-align: center;
+}
+
+.weather th, td {
+    padding: 5px;
+    vertical-align: middle;
+    border-bottom: 1px solid white;
+}
+
+.weather tbody tr:last-child td {
+    border-bottom: 0;
+}
+.weather th:first-child {
+    text-align: left;
+}
+.weather tbody td:first-child {
+    text-align: left;
 }
 
 .time {
