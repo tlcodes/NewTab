@@ -6,7 +6,6 @@ $(function() {
   var $usClock = $('.usclock');
   var $datep = $('.date');
   var $quote = $('blockquote');
-  //var visible = $clock.hasClass('hide');
 
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -27,23 +26,41 @@ $(function() {
              var $icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
              var location = weather.query.results.channel.location.city;
           
-            $weather.prepend($('<p>').html($icon + cels + '\u00B0 C'));
+            $weather.prepend($('<p>').html($icon + '<span class="maintemp tempChoice">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
             $weather.prepend($('<p>').text(location));
              
              // 10 day forecast (array of objects)
              var forecast = weather.query.results.channel.item.forecast;
               // properties are code, date, day, high, low, text
-             console.log(forecast[0].text);
-    
-            for (var i = 0; i < forecast.length; i++) {
+          
+            // here 7 days forecast, or forecast.length to append all 10 days
+            for (var i = 0; i < 7; i++) {
                 $(".forecast").append($('<tr>').html(
-                    '<td class="forecastDay">' + forecast[i].day + ' ' + forecast[i].date.substring(3,7) + forecast[i].date.substring(0,2) + '<br>' + forecast[i].text + '</td>' + 
-                    '<td>' + forecast[i].low + '</td>' + 
-                    '<td>' + forecast[i].high + '</td>' + 
+                    '<td>' + forecast[i].day + ' ' + forecast[i].date.substring(3,7) + forecast[i].date.substring(0,2) + '<br>' + forecast[i].text + '</td>' + 
+                    '<td><span class="temp">' + forecast[i].low + '</span>\u00B0 <span class="tempUnit">F</span></td>' + 
+                    '<td><span class="temp">' + forecast[i].high + '</span>\u00B0 <span class="tempUnit">F</span></td>' + 
                     '<td>' + "<img src='http://l.yimg.com/a/i/us/we/52/" + forecast[i].code  + ".gif'></td>"
                 ));
-                //$weather.append($('<p>').html($icon + cels + '\u00B0 C'));
             }
+          
+          // Toggle temperature units
+            $('tfoot').on('click', function() {
+                $('.fahrenheit').toggleClass('tempChoice');
+                $('.celsius').toggleClass('tempChoice');
+                // get temp choice and store it
+                var celsBool = $('.celsius').hasClass('tempChoice');
+                chrome.storage.sync.set({'celsius': celsBool});
+                if (celsBool) {
+                    $('.tempUnit').text('C');
+                    $('.maintemp').text(cels);
+
+                } else {
+                    $('.tempUnit').text('F');
+                    $('.maintemp').text(fahr);
+                    
+                }
+
+               });
         }); // end getJSON
 
       });
@@ -130,7 +147,7 @@ $.getJSON(call, function(quote) {
       //12 hour clock variables
     var ampm = hours >= 12 ? 'PM' : 'AM';
     var usHours = now.getHours() % 12 || 12;
-
+      
     $datep.html(today + ', ' + month + '/' + date);
     $clock.html(hours + ':' + minutes);
     $usClock.html(padZero(usHours) + ':' + minutes);
@@ -140,23 +157,16 @@ $.getJSON(call, function(quote) {
 
     // toggle weather forecast
 $('.weather').on('click', function() {
-     // get the clock status and store it first
-     // var visible = $clock.hasClass('hide');
-     // chrome.storage.sync.set({'visible24': visible});
     $('.weatherForecast').fadeToggle(1000);
-     
-
-   });    
-    
+   });
+ 
 // Toggle clock to 12 and 24 hour mode
  $('.time').on('click', function() {
-     // get the clock status and store it first
-     var visible = $clock.hasClass('hide');
-     chrome.storage.sync.set({'visible24': visible});
-     
-     $clock.toggleClass('hide');
-     $usClock.toggleClass('hide');
-
+    // get the clock status and store it first
+    var visibool = $clock.hasClass('hide');
+    chrome.storage.sync.set({'format24': visibool});
+    $clock.toggleClass('hide');
+    $usClock.toggleClass('hide');
    });
 
 
@@ -171,9 +181,24 @@ $('.weather').on('click', function() {
     }
   });
 
+// check the temp choice on page load
+chrome.storage.sync.get('celsBool', function(obj) {
+      if (!obj.celsBool) {
+          // need to get the value because variables are in local getJSON weather scope
+          $('.celsius').removeClass('tempChoice');
+          $('.fahrenheit').addClass('tempChoice');
+          
+      } else {
+          $('.fahrenheit').removeClass('tempChoice');
+          $('.celsius').addClass('tempChoice');
+          
+      }
+});
+
+    
     // on page load, check clock status and apply/remove 'hide' class
-  chrome.storage.sync.get('visible24', function(obj) {
-      if (!obj.visible24) {
+  chrome.storage.sync.get('format24', function(obj) {
+      if (!obj.format24) {
           $clock.addClass('hide');
           $usClock.removeClass('hide');
       } else {

@@ -14,13 +14,25 @@ body {
 }
 */
 body {
-    background: url("https://source.unsplash.com/category/nature/1600x900") no-repeat center center fixed;
+    background: url("https://source.unsplash.com/category/nature/1600x900/daily") no-repeat center center fixed;
     font-family: Lato, Helvetica;
     background-size: cover;
     color: white;
     text-shadow: 1px 1px 5px darkgray;
 }
-.weather {
+
+.settings {
+ /*   background-color: rgba(130, 160, 126, 0.701961); */
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: left;
+    font-size: 1.3em;
+    color: white;
+}
+
+#weatherBox {
  /*   background-color: rgba(130, 160, 126, 0.701961); */
     border-bottom-left-radius: 10px;
     position: absolute;
@@ -29,6 +41,7 @@ body {
     text-align: right;
     font-size: 1.3em;
     color: white;
+    text-transform: uppercase;
 }
 
 .weather img {
@@ -40,7 +53,7 @@ body {
 
 .weather p:first-of-type {
     margin-top: 30px;
-    text-transform: uppercase;
+    
 }
 
 .weather p {
@@ -48,36 +61,51 @@ body {
 }
 
 .weatherForecast {
+    
     font-size: 0.8em;
-    margin-right: 5px;
     display: none;
     background: rgba(80, 80, 95, 0.5);
     border: none;
-    border-radius: 0.5em;
+    border-radius: 5px;
     padding: 5px;
 }
-.weather table {
+
+.weatherForecast img {
+    width: 30px;
+    vertical-align: middle;
+}
+
+.weatherForecast table {
     border-collapse: collapse;
 }
 
-.weather td {
+.weatherForecast td {
     text-align: center;
+    margin: 5px 10px 0 0;
 }
 
-.weather th, td {
+.weatherForecast th, td {
     padding: 5px;
     vertical-align: middle;
-    border-bottom: 1px solid white;
+    text-align: center;
+}
+.weatherForecast th {
+    border-bottom: 1px solid lightgray;
 }
 
-.weather tbody tr:last-child td {
-    border-bottom: 0;
+.weatherForecast tfoot {
+    border-top: 1px solid lightgray;
 }
-.weather th:first-child {
+.weatherForecast th:first-child {
     text-align: left;
 }
-.weather tbody td:first-child {
+.weatherForecast tbody td:first-child {
     text-align: left;
+    margin-right: 5px;
+}
+
+.tempChoice {
+    font-weight: bold;
 }
 
 .time {
