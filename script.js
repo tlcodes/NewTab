@@ -21,12 +21,12 @@ $(function() {
              
              // main data (condition, temp, icon, location)
              var fahr = Math.round(data.temp);
-             var cels = Math.round((fahr - 32) / 1.8);
+             // var cels = Math.round((fahr - 32) / 1.8);
              var condition = data.text;
              var $icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
              var location = weather.query.results.channel.location.city;
           
-            $weather.prepend($('<p>').html($icon + '<span class="maintemp tempChoice">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
+            $weather.prepend($('<p>').html($icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
             $weather.prepend($('<p>').text(location));
              
              // 10 day forecast (array of objects)
@@ -43,29 +43,14 @@ $(function() {
                 ));
             }
           
-          // Toggle temperature units
-            $('tfoot').on('click', function() {
-                $('.fahrenheit').toggleClass('tempChoice');
-                $('.celsius').toggleClass('tempChoice');
-                // get temp choice and store it
-                var celsBool = $('.celsius').hasClass('tempChoice');
-                chrome.storage.sync.set({'celsius': celsBool});
-                if (celsBool) {
-                    $('.tempUnit').text('C');
-                    $('.maintemp').text(cels);
-
-                } else {
-                    $('.tempUnit').text('F');
-                    $('.maintemp').text(fahr);
-                    
-                }
-
-               });
+          
         }); // end getJSON
 
       });
     } // end navigator.gelocation
-  
+function toCelsius() {
+    return (this - 32) /1.8;
+}
 
     // Quotes from forismatic
 var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
@@ -157,7 +142,7 @@ $.getJSON(call, function(quote) {
 
     // toggle weather forecast
 $('.weather').on('click', function() {
-    $('.weatherForecast').fadeToggle(1000);
+    $('.weatherForecast').slideToggle(1000);
    });
  
 // Toggle clock to 12 and 24 hour mode
@@ -169,7 +154,32 @@ $('.weather').on('click', function() {
     $usClock.toggleClass('hide');
    });
 
+// Toggle temperature units
+$('tfoot').on('click', function() {
+    $('.fahrenheit').toggleClass('tempChoice');
+    $('.celsius').toggleClass('tempChoice');
+    // get temp choice and store it
+    var celsBool = $('.celsius').hasClass('tempChoice');
+    chrome.storage.sync.set({'celsius': celsBool});
+    if (celsBool) {
+        $('.tempUnit').text('C');
+        $('#weatherBox .temp').each(function() {
+            //var fTemp = parseInt($(this).text());s
+            // parseInt($(this).text());
+            //$(this).text(Math.round((fTemp - 32) / 1.8));
+            $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
+        });
+    } else {
+        $('.tempUnit').text('F');
+        $('#weatherBox .temp').each(function() {
+            //var cTemp = parseInt($(this).text());
+            // parseInt($(this).text());
+            //$(this).text(Math.round((cTemp * 1.8) + 32));
+            $(this).text(Math.round(($(this).text() * 1.8) + 32));
+        });
+    }
 
+   });
 
   // on page load, check if there is previous text stored
   chrome.storage.sync.get('mainGoal', function(obj) {
@@ -184,17 +194,29 @@ $('.weather').on('click', function() {
 // check the temp choice on page load
 chrome.storage.sync.get('celsBool', function(obj) {
       if (!obj.celsBool) {
+          
           // need to get the value because variables are in local getJSON weather scope
           $('.celsius').removeClass('tempChoice');
           $('.fahrenheit').addClass('tempChoice');
-          
+          $('.tempUnit').text('F');                    
+          $('#weatherBox .temp').each(function() {
+              //var cTemp = parseInt($(this).text());
+              //parseInt($(this).text());
+              //$(this).text(Math.round((cTemp * 1.8) + 32));
+              $(this).text(Math.round(($(this).text() * 1.8) + 32));
+        });
       } else {
           $('.fahrenheit').removeClass('tempChoice');
           $('.celsius').addClass('tempChoice');
-          
+          $('.tempUnit').text('C');
+          $('#weatherBox .temp').each(function() {
+              //var fTemp = parseInt($(this).text());
+              //parseInt($(this).text());
+              //$(this).text(Math.round((fTemp - 32) / 1.8));
+              $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
+            });
       }
 });
-
     
     // on page load, check clock status and apply/remove 'hide' class
   chrome.storage.sync.get('format24', function(obj) {
