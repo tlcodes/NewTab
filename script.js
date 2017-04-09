@@ -1,30 +1,32 @@
 $(function() {
-    
+
     var $weather = $('.weather');
     var $goalInput = $('.mainForm input');
     var $clock = $('.clock');
     var $usClock = $('.usclock');
     var $datep = $('.date');
     var $quote = $('blockquote');
-    
+
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = (position.coords.latitude);
             var longitude = (position.coords.longitude);
-            
+
+
             var yql = 'select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text="('+ latitude + ',' + longitude + ')")';
             var url = "https://query.yahooapis.com/v1/public/yql?q=" + yql + "&format=json";
-            
+
             $.getJSON(url, function(weather) {
-                
+
                 var data = weather.query.results.channel.item.condition;
-                
+
                 // main data (condition, temp, icon, location)
                 var fahr = Math.round(data.temp);
                 // var cels = Math.round((fahr - 32) / 1.8);
                 var condition = data.text;
                 var $icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
                 var location = weather.query.results.channel.location.city;
+
                 
                 $weather.prepend($('<p>').html($icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
                 $weather.prepend($('<p>').text(location));
@@ -50,6 +52,7 @@ $(function() {
                         //           $('.celsius').removeClass('tempChoice');
                         $('.fahrenheit').addClass('tempChoice');
                         $('.tempUnit').text('F');                    
+
                     } else {
                         //           $('.fahrenheit').removeClass('tempChoice');
                         $('.celsius').addClass('tempChoice');
@@ -62,18 +65,13 @@ $(function() {
                         });
                     }
                 });
-                
-                
+
             }); // end getJSON
-            
+
         });
     } // end navigator.gelocation
-    
-    
-    function toCelsius() {
-        return (this - 32) /1.8;
-    }
-    
+
+
     // Quotes from forismatic
     var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
     $.getJSON(call, function(quote) {
@@ -82,9 +80,7 @@ $(function() {
         $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
         $quote.append($('<cite>').text('\u007E' + author));
     });
-    
-    // $('.mainForm input').eq(0).focus();   // Chrome forbids the extensions that substitute the new tab page from grabbing focus from the omnibar
-    
+
     // Hide one element, display another one and do it smoothly
     function transitionSmoothly(toHide, toDisplay) {
         toHide.css('opacity', 0);       // used in conjunction with the css 'transition' property to make it gradually disappear
@@ -96,8 +92,7 @@ $(function() {
             }, 10);                              // because the 'display' property for this element has just been modified
         }, 1000);
     }
-    
-    
+
     // attach 'submit' event handler to daily focus prompt
     $('.mainForm').on('submit', function(event) {
         event.preventDefault();     // prevent the page from reloading, which is the default action for 'submit' event
@@ -114,13 +109,15 @@ $(function() {
     $('#removeDailyGoal').on('click', function() {
         $goalInput.val('');
         chrome.storage.local.set({'mainGoal': ''});    // remove the daily focus text from the storage
+
+
         transitionSmoothly($('.submittedGoalContainer'), $('.goalPrompt'));
         setTimeout(function() {                         // set the checkbox contents to nothing and reset its 'checked' property after enough time has passed, allowing the
             $('#submittedGoal + label > span').text('');// containing div to disappear
             $('#submittedGoal').prop('checked', false);
         }, 1000);
     });
-    
+
     // Test if the submit text has been saved
     chrome.storage.onChanged.addListener(function(changes, namespace) {
         for (key in changes) {
@@ -131,6 +128,7 @@ $(function() {
             namespace,
             storageChange.oldValue,
             storageChange.newValue);
+
             
             if(key == "mainGoal") {
                 showDailyGoal(storageChange.newValue);
@@ -147,6 +145,7 @@ $(function() {
         return n < 10 ? '0' + n : n;
     }
     
+
     function theTime() {
         var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var now = new Date();
@@ -154,26 +153,26 @@ $(function() {
         var day = now.getDay();
         var today = dayNames[day];
         var month = padZero(now.getMonth() + 1);
-        
+
         var hours = padZero(now.getHours());
         var minutes = padZero(now.getMinutes());
-        
+
         //12 hour clock variables
         var ampm = hours >= 12 ? 'PM' : 'AM';
         var usHours = now.getHours() % 12 || 12;
-        
+
         $datep.html(today + ', ' + month + '/' + date);
         $clock.html(hours + ':' + minutes);
         $usClock.html(padZero(usHours) + ':' + minutes);
         $usClock.append($('<span>').addClass('ampm').text(ampm));
-        
+
     }
-    
+
     // toggle weather forecast
     $('.weather').on('click', function() {
         $('.weatherForecast').slideToggle(1000);
     });
-    
+
     // Toggle clock to 12 and 24 hour mode
     $('.time').on('click', function() {
         // get the clock status and store it first
@@ -181,8 +180,8 @@ $(function() {
         chrome.storage.local.set({'format24': visibool});
         $clock.toggleClass('hide');
         $usClock.toggleClass('hide');
-    });
-    
+    });    
+
     // Toggle temperature units
     $('tfoot').on('click', function() {
         $('.fahrenheit, .celsius').toggleClass('tempChoice');
@@ -190,7 +189,9 @@ $(function() {
         // get temp choice and store it
         var celsBool = $('.celsius').hasClass('tempChoice');
         console.log(celsBool);
+
         chrome.storage.local.set({'celsBool': celsBool});
+
         if (celsBool) {
             $('.tempUnit').text('C');
             $('#weatherBox .temp').each(function() {
@@ -208,10 +209,9 @@ $(function() {
                 $(this).text(Math.round(($(this).text() * 1.8) + 32));
             });
         }
+
         
-    });
-    
-    
+    });    
     
 
      function showDailyGoal(obj) {
@@ -345,6 +345,5 @@ $(function() {
         });      
     });
     
-     drawList();
-    
+     drawList();    
 });
