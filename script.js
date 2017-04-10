@@ -6,6 +6,12 @@ $(function() {
     var $usClock = $('.usclock');
     var $datep = $('.date');
     var $quote = $('blockquote');
+    var $submittedGoalSpan = $('#submittedGoal + label > span');
+    var $goalPrompt = $('.goalPrompt');
+    var $submittedGoalContainer  = $('.submittedGoalContainer');
+    var $submittedGoal = $('#submittedGoal');
+    var $tempUnit;
+    var $temperatureSpans;
 
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -21,14 +27,13 @@ $(function() {
                 var data = weather.query.results.channel.item.condition;
 
                 // main data (condition, temp, icon, location)
-                var fahr = Math.round(data.temp);
-                // var cels = Math.round((fahr - 32) / 1.8);
+                var fahr = Math.round(data.temp);                
                 var condition = data.text;
-                var $icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
+                var icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
                 var location = weather.query.results.channel.location.city;
 
                 
-                $weather.prepend($('<p>').html($icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
+                $weather.prepend($('<p>').html(icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
                 $weather.prepend($('<p>').text(location));
                 
                 // 10 day forecast (array of objects)
@@ -45,22 +50,18 @@ $(function() {
                     ));
                 }
                 
+                $temperatureSpans = $('#weatherBox .temp');
+                $tempUnit = $('.tempUnit');
+                
                 chrome.storage.local.get('celsBool', function(obj) {    
-                    if (!obj.celsBool) {
-                        
-                        // need to get the value because variables are in local getJSON weather scope
-                        //           $('.celsius').removeClass('tempChoice');
+                    if (!obj.celsBool) {                        
+                        // need to get the value because variables are in local getJSON weather scope                        
                         $('.fahrenheit').addClass('tempChoice');
-                        $('.tempUnit').text('F');                    
-
-                    } else {
-                        //           $('.fahrenheit').removeClass('tempChoice');
+                        $tempUnit.text('F');
+                    } else {                        
                         $('.celsius').addClass('tempChoice');
-                        $('.tempUnit').text('C');
-                        $('#weatherBox .temp').each(function() {
-                            //var fTemp = parseInt($(this).text());
-                            //parseInt($(this).text());
-                            //$(this).text(Math.round((fTemp - 32) / 1.8));
+                        $tempUnit.text('C');
+                        $temperatureSpans.each(function() {
                             $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
                         });
                     }
@@ -89,7 +90,7 @@ $(function() {
             toDisplay.css('display', 'block');   // and add the other one instead - default CSS value for opacity is set to 0, so it won't appear yet
             setTimeout(function() {
                 toDisplay.css('opacity', '1');   // A slight delay is needed before setting the opacity to 1, otherwise 'transition' effect will be ignored
-            }, 10);                              // because the 'display' property for this element has just been modified
+            }, 10);                              
         }, 1000);
     }
 
@@ -99,36 +100,26 @@ $(function() {
         var goal = $goalInput.val();
         if(goal) {                  // ensure that the input is not empty
             chrome.storage.local.set({'mainGoal': { text: goal, checked: false }});     // store the input text
-            $('#submittedGoal + label > span').text(goal);
-            transitionSmoothly($('.goalPrompt'), $('.submittedGoalContainer'));
-        }
-        
+            $submittedGoalSpan.text(goal);
+            transitionSmoothly($goalPrompt, $submittedGoalContainer);
+        }        
     });
     
     // attach event handler to the 'x' button to remove the daily focus
     $('#removeDailyGoal').on('click', function() {
         $goalInput.val('');
         chrome.storage.local.set({'mainGoal': ''});    // remove the daily focus text from the storage
-
-
-        transitionSmoothly($('.submittedGoalContainer'), $('.goalPrompt'));
+        transitionSmoothly($submittedGoalContainer, $goalPrompt);
         setTimeout(function() {                         // set the checkbox contents to nothing and reset its 'checked' property after enough time has passed, allowing the
-            $('#submittedGoal + label > span').text('');// containing div to disappear
-            $('#submittedGoal').prop('checked', false);
+            $submittedGoalSpan.text('');// containing div to disappear
+            $submittedGoal.prop('checked', false);
         }, 1000);
     });
 
-    // Test if the submit text has been saved
+    // Update the page and other open tabs
     chrome.storage.onChanged.addListener(function(changes, namespace) {
         for (key in changes) {
             var storageChange = changes[key];
-            console.log('Storage key "%s" in namespace "%s" changed. ' +
-            'Old value was "%s", new value is "%s".',
-            key,
-            namespace,
-            storageChange.oldValue,
-            storageChange.newValue);
-
             
             if(key == "mainGoal") {
                 showDailyGoal(storageChange.newValue);
@@ -169,7 +160,7 @@ $(function() {
     }
 
     // toggle weather forecast
-    $('.weather').on('click', function() {
+    $weather.on('click', function() {
         $('.weatherForecast').slideToggle(1000);
     });
 
@@ -184,45 +175,35 @@ $(function() {
 
     // Toggle temperature units
     $('tfoot').on('click', function() {
-        $('.fahrenheit, .celsius').toggleClass('tempChoice');
-        //     $('.celsius').toggleClass('tempChoice');
+        $('.fahrenheit, .celsius').toggleClass('tempChoice');        
         // get temp choice and store it
-        var celsBool = $('.celsius').hasClass('tempChoice');
-        console.log(celsBool);
+        var celsBool = $('.celsius').hasClass('tempChoice');        
 
         chrome.storage.local.set({'celsBool': celsBool});
 
         if (celsBool) {
-            $('.tempUnit').text('C');
-            $('#weatherBox .temp').each(function() {
-                //var fTemp = parseInt($(this).text());
-                // parseInt($(this).text());
-                //$(this).text(Math.round((fTemp - 32) / 1.8));
+            $tempUnit.text('C');
+            $temperatureSpans.each(function() {
                 $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
             });
         } else {
-            $('.tempUnit').text('F');
-            $('#weatherBox .temp').each(function() {
-                //var cTemp = parseInt($(this).text());
-                // parseInt($(this).text());
-                //$(this).text(Math.round((cTemp * 1.8) + 32));
+            $tempUnit.text('F');
+            $temperatureSpans.each(function() {
                 $(this).text(Math.round(($(this).text() * 1.8) + 32));
             });
-        }
-
-        
+        }        
     });    
     
 
      function showDailyGoal(obj) {        
         if(obj && obj.text) {                         // if there is already a stored text, display it            
-            $('#submittedGoal + label > span').text(obj.text);
-            $('#submittedGoal').prop('checked', obj.checked);
-            transitionSmoothly($('.goalPrompt'), $('.submittedGoalContainer'));
+            $submittedGoalSpan.text(obj.text);          
+            $submittedGoal.prop('checked', obj.checked);
+            transitionSmoothly($goalPrompt, $submittedGoalContainer);
         } else {      // otherwise, display the prompt
-            $('#submittedGoal + label > span').text('');
-            $('#submittedGoal').prop('checked', false);            
-            transitionSmoothly($('.submittedGoalContainer'), $('.goalPrompt'));
+            $submittedGoalSpan.text('');
+            $submittedGoal.prop('checked', false);            
+            transitionSmoothly($submittedGoalContainer, $goalPrompt);
         }
     }
     
@@ -232,7 +213,10 @@ $(function() {
         var obj = response.mainGoal;
         showDailyGoal(obj);
     });
-
+    
+    // check the temp choice on page load
+    
+    
     // on page load, check clock status and apply/remove 'hide' class
     chrome.storage.local.get('format24', function(obj) {
         if (!obj.format24) {
@@ -245,25 +229,28 @@ $(function() {
     });
     
     
-    $("#showList").on('click', function() {    
-        let currentLeft = $('.to-do .listContainer').css("left");
+    var $listContainer = $('.to-do .listContainer');
+    var $showList = $("#showList");
+    
+    $showList.on('click', function() {    
+        let currentLeft = $listContainer.css("left");
         let newLeft;
         if(currentLeft == '0px') {
             newLeft = '100%';
-            $('.showList').css('right', '0.5em');
+            $showList.css('right', '0.5em');
             setTimeout(function() {
                 $('.to-do').css('visibility', 'hidden');
             }, 600);
         }
         else {
             newLeft = '0px';
-            $('.showList').css('right', '7em');
+            $showList.css('right', '7em');
             setTimeout(function() {
                 $('#addNote').focus();
             }, 700);
             $('.to-do').css('visibility', 'visible');
         }
-        $('.to-do .listContainer').animate({
+        $listContainer.animate({
             "left": newLeft
         }, 500);    
     });
@@ -287,11 +274,8 @@ $(function() {
         $label.append($span);
         var $button = $('<button type="button"></button>');
         $button.on('click', function() {
-//             $container.remove();
             list.splice(idNum, 1);
-            chrome.storage.local.set({'list': list});        
-//             $list.empty();
-//             drawList();
+            chrome.storage.local.set({'list': list});
         });
         var $container = $('<li></li>').append($checkbox, $label, $button);
         $list.append($container);
@@ -302,39 +286,25 @@ $(function() {
         currentID = 0;
         $list.empty();
         chrome.storage.local.get('list', function(obj) {
-            if(obj.list) {
-                //             drawList(obj.list);
+            if(obj.list) {                
                 list = obj.list;
                 list.forEach(addItem);        
-            } else {      
-                
             }
-        });  
-        
-        
+        });        
     }
+    
+    var $addNote = $('#addNote');
     
     $('#noteForm').on('submit', function(event) {
         event.preventDefault();
-        let text = $('#addNote').val();
-        /*
-         *        let $label = $('<label>');
-         *        let $span = $('<span></span>').text(text);
-         *        let $note = $('<div class="note"></div>').append($('<input type="checkbox">'), $label.append($span));
-         *        
-         *        $note.insertBefore($('#noteForm'));
-         *        $('#addNote').val('');
-         *        
-         */
+        let text = $addNote.val();
         list.push({ text: text, checked: false });
-        chrome.storage.local.set({'list': list});        
-//         drawList();        
-        $('#addNote').val('');
-        
+        chrome.storage.local.set({'list': list});             
+        $addNote.val('');        
     }); 
     
     
-    $('#submittedGoal').on('change', function() {
+    $submittedGoal.on('change', function() {
         var that = this;
         chrome.storage.local.get('mainGoal', function(response) {
             chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
