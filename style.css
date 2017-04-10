@@ -163,7 +163,8 @@ body {
     margin: auto;    
 }
 
-.mainForm input{    
+.mainForm input,
+.to-do .addNote {    
     background: rgba(80, 80, 95, 0.5);
     width: 100%;
     height: 2em;
@@ -234,13 +235,13 @@ input:-webkit-autofill {
   opacity: 0;
   vertical-align: middle;
   cursor: pointer;
-  display: inline-block;
+/*   display: inline-block; */
 }
 
 .submittedGoalContainer input[type="checkbox"] + label {
   cursor: pointer;  
   margin-left: 24px;
-  display: inline-block;  
+/*   display: inline-block;   */
 }
 
 /* Using ::before and ::after pseudo-elements to customize checkbox appearance */
@@ -317,16 +318,22 @@ button {
 
 .submittedGoalContainer button {
   color: white;  
-  border-radius: 4px;
+  border-radius: 50%;
   cursor: pointer;
   font-size: 1em;
-  border: 1px solid white;
+  border: 2px solid white;
   padding: 3px 8px 3px 8px;
   color: inherit;
   visibility: hidden;
   position: absolute;
-  top: 0;
+  top: 3px;
   right: -46px;
+  background: url('x.png');
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
 }
 
 /* Show the button on hover */
@@ -349,4 +356,198 @@ blockquote {
    
 blockquote cite {
     font-size: 0.9em;
+}
+
+
+.to-do {
+    position: absolute;
+    bottom: 4em;
+    right: 0;
+    width: 25em;
+    height: 25em;        
+    overflow-x: hidden;
+    box-sizing: border-box;
+    visibility: hidden;
+}
+
+.to-do .listContainer {
+    width: 95%;
+    height: 95%;
+    background-color: rgba(80, 80, 95, 0.5);
+/*     background: red; */
+    position: absolute;
+    left: 100%;
+    border-radius: 1em;
+    box-sizing: border-box;
+/*     padding-top: 1em; */
+}
+
+.listContainer form {
+    position: absolute;
+    bottom: 1em;
+    width: 96%;
+}
+
+.to-do-list {
+    list-style-type: none;
+    padding-left: 1em;
+    height: 18.6em;
+    overflow: auto;
+}
+
+.to-do-list button {
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid white;
+    border-radius: 50%;
+    vertical-align: top;
+    position: relative;
+    top: 3px;
+    color: white;
+    background: url('x.png');
+    background-size: 55%;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.to-do-list li:hover button {
+    visibility: visible;
+}
+
+.showList {
+    position: absolute;
+    bottom: 0;
+    width: 3em;
+    height: 3em;
+    font-size: 1.5em;
+    right: 0.5em;
+    color: white;
+/*     border-top-left-radius: 1em; */
+    box-sizing: content-box;
+    cursor: pointer;    
+    background: no-repeat center/75% url('list_icon.png');
+    transition: right 0.7s;
+}
+
+.showList:focus {
+    outline: none;
+}
+
+
+/*
+.showList:hover {
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+}
+*/
+
+.to-do .addNote {
+    font-size: 1.5em;
+    width: 100%;
+    height: 1.5em; 
+    line-height: 1em;
+    background: rgba(50, 50, 55, 0.7);
+    border-radius: 0;
+    text-align: left;
+    padding-left: 4%;
+}
+
+.to-do-list li {
+    position: relative;
+    margin-bottom: 0.5em;
+}
+
+.to-do-list input[type="checkbox"] {
+  opacity: 0;
+/*   vertical-align: middle; */
+  cursor: pointer;
+/*   display: inline-block; */
+}
+
+.to-do-list input[type="checkbox"] + label {
+  cursor: pointer;  
+  margin-left: 6px;
+/*   display: inline-block;   */
+}
+
+/* Using ::before and ::after pseudo-elements to customize checkbox appearance */
+
+.to-do-list input[type="checkbox"] + label::before {
+    top: 2px;
+    position: absolute;
+    left: -1px;
+    width: 15px;
+    height: 15px;
+    /* background-color: white; */
+    border-radius: 5px;
+    display: inline-block;
+    content: "";
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+
+/* unchecked state */
+.to-do-list input[type="checkbox"] + label::after {
+  position: absolute;
+  top: 4px;
+  left: 1px;
+  width: 15px;
+  height: 16px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaDike3R8gLgAAAIlJREFUSMftljEOwCAMAzHi/192p24FkjSGqiITYuAUfEGAZNlRtWyqA/4NuGtuWwC811B3TMt+XXW1yoy5Qy7389eMByET2uuYUWEmNbSajs7C0EjGzIBG5XoNfQIjcbzglQtq6OiqoYTOMoYKapELCqjVamRDPeOE5Ehcc4xMCZtKnvPL/Az4Aj05Fj+Wh7yCAAAAAElFTkSuQmCC");
+  border-radius: 4px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  content: "";
+  opacity: 0;
+  max-width: 0;
+  cursor: pointer;
+  transition: max-width 0s 0.5s, opacity 0.5s;
+  /* transition-delay: 1s; */
+  /* transition: opacity, max-width; */
+}
+
+/* checked state */
+.to-do-list input[type="checkbox"]:checked + label::after {
+  opacity: 1;
+  transition: all 0.5s;
+  max-width: 20px;
+}
+
+.to-do-list input[type="checkbox"]:checked + label > span {
+    text-decoration: line-through;
+}
+
+.to-do-list input[type="checkbox"] + label > span {    
+    vertical-align: bottom;
+    font-size: 1.4em;
+    width: 12.5em;
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.to-do-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.to-do-list::-webkit-scrollbar-track {
+    background: lightgray;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.to-do-list::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+.weather,
+td.fahrenheit,
+td.celsius {
+    cursor: pointer;
 }
