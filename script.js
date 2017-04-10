@@ -214,10 +214,9 @@ $(function() {
     });    
     
 
-     function showDailyGoal(obj) {
-        var text = obj.text;
-        if(text) {                         // if there is already a stored text, display it            
-            $('#submittedGoal + label > span').text(text);
+     function showDailyGoal(obj) {        
+        if(obj && obj.text) {                         // if there is already a stored text, display it            
+            $('#submittedGoal + label > span').text(obj.text);
             $('#submittedGoal').prop('checked', obj.checked);
             transitionSmoothly($('.goalPrompt'), $('.submittedGoalContainer'));
         } else {      // otherwise, display the prompt
