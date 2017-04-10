@@ -195,7 +195,7 @@ $(function() {
         if (celsBool) {
             $('.tempUnit').text('C');
             $('#weatherBox .temp').each(function() {
-                //var fTemp = parseInt($(this).text());s
+                //var fTemp = parseInt($(this).text());
                 // parseInt($(this).text());
                 //$(this).text(Math.round((fTemp - 32) / 1.8));
                 $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
@@ -233,10 +233,7 @@ $(function() {
         var obj = response.mainGoal;
         showDailyGoal(obj);
     });
-    
-    // check the temp choice on page load
-    
-    
+
     // on page load, check clock status and apply/remove 'hide' class
     chrome.storage.local.get('format24', function(obj) {
         if (!obj.format24) {
