@@ -58,10 +58,10 @@ $(function() {
                 chrome.storage.local.get('celsBool', function(obj) {    
                     if (!obj.celsBool) {                        
                         // need to get the value because variables are in local getJSON weather scope                        
-                        $('.fahrenheit').addClass('tempChoice');
+                        $('.fahrenheit').addClass('choice');
                         $tempUnit.text('F');
                     } else {                        
-                        $('.celsius').addClass('tempChoice');
+                        $('.celsius').addClass('choice');
                         $tempUnit.text('C');
                         $temperatureSpans.each(function() {
                             $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
@@ -168,6 +168,51 @@ $(function() {
     $weather.on('click', function() {
         $('.weatherForecast').slideToggle(1000);
     });
+    
+    // Toggle settings
+    
+    $('.cog').on('click', function() {
+        $('#settingList').animate({width:'toggle'});
+    });
+    
+    // Show team
+    $('.creditIcon').on('click', function() {
+        $('.team').slideToggle(1000);
+    })
+    
+    // toggle settings choices
+    // Show/hide weather
+    $('.setWeather').on('click', function() {
+        $('.setWeather').toggleClass('choice');
+        $('#weatherBox').toggleClass('hide');
+        // get temp choice and store it
+        var showWeather = $('.setWeather').hasClass('choice');        
+        chrome.storage.local.set({'showWeather': showWeather});
+    });
+    // Show/hide main goal
+    $('.setGoal').on('click', function() {
+        $('.setGoal').toggleClass('choice');
+        $('.todaysGoal').toggleClass('hide');
+        // get temp choice and store it
+        var showGoal = $('.setGoal').hasClass('choice');        
+        chrome.storage.local.set({'showGoal': showGoal});
+    });
+    // Show/Hide quote
+    $('.setQuote').on('click', function() {
+        $('.setQuote').toggleClass('choice');
+        $('blockquote').toggleClass('hide');
+        // get temp choice and store it
+        var showQuote = $('.setQuote').hasClass('choice');        
+        chrome.storage.local.set({'showQuote': showQuote});
+    });
+    // Show/Hide todo list
+    $('.setTodo').on('click', function() {
+        $('.setTodo').toggleClass('choice');
+        $('#showList').toggleClass('hide');
+        // get temp choice and store it
+        var showTodo = $('.setTodo').hasClass('choice');        
+        chrome.storage.local.set({'showTodo': showTodo});
+    });
 
     // Toggle clock to 12 and 24 hour mode
     $('.time').on('click', function() {
@@ -178,9 +223,9 @@ $(function() {
 
     // Toggle temperature units
     $('tfoot').on('click', function() {
-        $('.fahrenheit, .celsius').toggleClass('tempChoice');        
+        $('.fahrenheit, .celsius').toggleClass('choice');        
         // get temp choice and store it
-        var celsBool = $('.celsius').hasClass('tempChoice');        
+        var celsBool = $('.celsius').hasClass('choice');        
 
         chrome.storage.local.set({'celsBool': celsBool});
 
@@ -197,6 +242,65 @@ $(function() {
         }        
     });    
     
+    
+    // on page load, check if there is previous text stored
+    chrome.storage.local.get('mainGoal', function(response) {
+        var obj = response.mainGoal;
+        showDailyGoal(obj);
+    });
+    
+
+    // on page load, check clock status and apply the appropriate format
+    chrome.storage.local.get('format12', function(obj) {
+        format12 = obj.format12 ? true : false;        
+        setInterval(theTime, 1000);
+    });
+    
+    // Show/Hide weather on page load
+    chrome.storage.local.get('showWeather', function(obj) {
+        if (obj.showWeather) {
+            $('#weatherBox').removeClass('hide');
+            $('.setWeather').addClass('choice');
+            
+        } else {
+            $('#weatherBox').addClass('hide');
+            $('.setWeather').removeClass('choice');
+        }
+    });
+    
+    
+    // Show/Hide Goal on page load
+    chrome.storage.local.get('showGoal', function(obj) {
+        if (obj.showGoal) {
+            $('.todaysGoal').removeClass('hide');
+            $('.setGoal').addClass('choice');
+        } else {
+            $('.todaysGoal').addClass('hide');
+            $('.setGoal').removeClass('choice');
+        }
+    });
+    
+    // Show/Hide Quote on page load
+    chrome.storage.local.get('showQuote', function(obj) {
+        if (obj.showQuote) {
+            $('blockquote').removeClass('hide');
+            $('.setQuote').addClass('choice');
+        } else {
+            $('blockquote').addClass('hide');
+            $('.setQuote').removeClass('choice');
+        }
+    });
+    
+    // Show/Hide Quote on page load
+    chrome.storage.local.get('showTodo', function(obj) {
+        if (obj.showTodo) {
+            $('#showList').removeClass('hide');
+            $('.setTodo').addClass('choice');
+        } else {
+            $('#showList').addClass('hide');
+            $('.setTodo').removeClass('choice');
+        }
+    });
 
      function showDailyGoal(obj) {        
         if(obj && obj.text) {                         // if there is already a stored text, display it            
@@ -209,22 +313,6 @@ $(function() {
             transitionSmoothly($submittedGoalContainer, $goalPrompt);
         }
     }
-    
-    
-    // on page load, check if there is previous text stored
-    chrome.storage.local.get('mainGoal', function(response) {
-        var obj = response.mainGoal;
-        showDailyGoal(obj);
-    });
-    
-    // check the temp choice on page load
-    
-    
-    // on page load, check clock status and apply the appropriate format
-    chrome.storage.local.get('format12', function(obj) {
-        format12 = obj.format12 ? true : false;        
-        setInterval(theTime, 1000);
-    });
     
     
     var $listContainer = $('.to-do .listContainer');
@@ -270,7 +358,7 @@ $(function() {
         var $span = $('<span></span>').text(item.text);
         let $label = $('<label>').attr('for', id);
         $label.append($span);
-        var $button = $('<button type="button"></button>');
+        var $button = $('<button type="button"><span class="icon-cancel-circle"></button>');
         $button.on('click', function() {
             list.splice(idNum, 1);
             chrome.storage.local.set({'list': list});

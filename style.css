@@ -8,15 +8,109 @@ body {
     text-shadow: 1px 1px 5px darkgray;    
 }
 
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?nqquoz');
+  src:  url('fonts/icomoon.eot?nqquoz#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?nqquoz') format('truetype'),
+    url('fonts/icomoon.woff?nqquoz') format('woff'),
+    url('fonts/icomoon.svg?nqquoz#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-list:before {
+  content: "\e9ba";
+}
+.icon-info:before {
+  content: "\ea0c";
+}
+.icon-cancel-circle:before {
+  content: "\ea0d";
+}
+.icon-checkbox-checked:before {
+  content: "\ea52";
+}
+.icon-checkbox-unchecked:before {
+  content: "\ea53";
+}
+.icon-embed2:before {
+  content: "\ea80";
+}
+.icon-github:before {
+  content: "\eab0";
+}
+
+/* SETTINGS PANEL */
+
 .settings {
- /*   background-color: rgba(130, 160, 126, 0.701961); */
-    border-bottom-left-radius: 10px;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    text-align: left;
-    font-size: 1.3em;
+    top: 15px;
+    left: 10px;
+    font-size: 1.5em;
     color: white;
+    text-transform: uppercase;
+    display: block;
+}
+
+#settingIcon {
+    float:left;
+    margin-right: 10px;
+}
+.settings .cog {
+    font-size: 1.5em;
+    color: lightgray;
+    display: inline-block;
+}
+
+.settings .cog:hover {
+    cursor: pointer;
+    color: white;
+    text-shadow: 0 0 10px white;
+}
+
+#settingList {
+    display: none;
+    float: right;
+}
+
+.settings ul {
+    background: rgba(80, 80, 95, 0.5);
+    border: none;
+    border-radius: 5px;
+    margin: 0;
+    padding: 5px;
+    font-size: 0.8em;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.settings li {
+    font-size: 0.8em;
+    display: inline;
+    margin: 0 10px;
+    cursor: pointer;
+}
+.settings li:last-child {
+  margin-right: 0;
 }
 
 /* Weather */
@@ -99,7 +193,7 @@ body {
     margin-right: 5px;
 }
 
-.tempChoice {
+.choice {
     font-weight: bold;
 }
 
@@ -238,40 +332,43 @@ input:-webkit-autofill {
 /* Using ::before and ::after pseudo-elements to customize checkbox appearance */
 
 .submittedGoalContainer input[type="checkbox"] + label::before {
-  top: 3px;
+  font-family: icomoon;
+  top: 6px;
   position: absolute;
-  left: -3px;
+  left: -1px;
   width: 20px;
-  height: 20px;  
-  border-radius: 5px;
+  height: 20px;
+  /* background-color: white; */
+  /*border-radius: 5px;*/
   display: inline-block;
-  content: "";
+  content: "\ea53";
   cursor: pointer;
-  border: 2px solid white;
+  /*border: 2px solid white;*/
 }
-
 
 /* unchecked state */
 .submittedGoalContainer input[type="checkbox"] + label::after {
+    font-family: icomoon;
   position: absolute;
   top: 6px;
   left: 1px;
   width: 16px;
   height: 16px;
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaDike3R8gLgAAAIlJREFUSMftljEOwCAMAzHi/192p24FkjSGqiITYuAUfEGAZNlRtWyqA/4NuGtuWwC811B3TMt+XXW1yoy5Qy7389eMByET2uuYUWEmNbSajs7C0EjGzIBG5XoNfQIjcbzglQtq6OiqoYTOMoYKapELCqjVamRDPeOE5Ehcc4xMCZtKnvPL/Az4Aj05Fj+Wh7yCAAAAAElFTkSuQmCC");
-  border-radius: 4px;
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: -2px -1px;
   display: inline-block;
-  content: "";
+  content: "\ea52";
   opacity: 0;
   max-width: 0;
   cursor: pointer;
-  transition: max-width 0s 0.5s, opacity 0.5s;  
+  transition: max-width 0s 0.5s, opacity 0.5s;
 }
 
 /* checked state */
+.submittedGoalContainer input[type="checkbox"]:checked + label::before {
+  opacity: 0;
+  transition: all 0.5s;
+  max-width: 20px;
+}
+
 .submittedGoalContainer input[type="checkbox"]:checked + label::after {
   opacity: 1;
   transition: all 0.5s;
@@ -306,24 +403,19 @@ button {
 
 .submittedGoalContainer button {
   color: white;  
-  border-radius: 50%;
+  /*border-radius: 50%;*/
   cursor: pointer;
   font-size: 1em;
-  border: 2px solid white;
+  /*border: 2px solid white;*/
   padding: 3px 8px 3px 8px;
   color: inherit;
   visibility: hidden;
-  position: relative;
+  position: absolute;
   top: 4px;
   right: -24px;
-  background: url('x.png');
-  background-size: 50%;
-  background-position: center;
-  background-repeat: no-repeat;
   width: 24px;
   height: 24px;
 }
-
 /* Show the button on hover */
 
 .submittedGoalContainer fieldset:hover button {
@@ -340,7 +432,7 @@ blockquote {
     text-align: center;
     font-size: 1.3em;
     font-style: italic;
-    max-width:60%;
+    max-width:50%;
     margin:auto;
 }
    
@@ -386,49 +478,41 @@ blockquote cite {
 .to-do-list button {
     width: 1.5em;
     height: 1.5em;
-    border: 1px solid white;
-    border-radius: 50%;
-    vertical-align: top;
+    font-size: 1.2em;
+    vertical-align: middle;
     position: relative;
-    top: 3px;
+    top: 4px;
     color: white;
-    background: url('x.png');
-    background-size: 55%;
-    background-position: center;
-    background-repeat: no-repeat;
     cursor: pointer;
     visibility: hidden;
 }
-
 .to-do-list li:hover button {
     visibility: visible;
 }
 
 .showList {
     position: absolute;
-    bottom: 0.7em;
-    width: 2.667em;
-    height: 2.667em;
+    bottom: 0.5em;
+    width: 2em;
+    height: 2em;
     font-size: 1.5em;
-    right: 0.7em;
-    color: white;
+    right: 0.5em;
+    color: lightgray;
+    border: 2px solid lightgray;
+    border-radius: 50%;
     box-sizing: content-box;
     cursor: pointer;    
-    border: 2px solid white;
-    background: no-repeat url('list_icon_b.png');
-    background-size: 260%;
-    background-position: -6px center;
-    transition: right 0.7s;    
-    border-radius: 25%;
-}
-
-.showList:hover {
-    background-position: -68px center;
-    box-shadow: 0 0 1em white;
+    transition: right 0.7s;
 }
 
 .showList:focus {
-    outline: none;
+    outline:none;
+}
+
+.showList:hover {
+    color:white;
+    border-color:white;
+    box-shadow: 0 0 10px white;
 }
 
 
@@ -461,37 +545,37 @@ blockquote cite {
 /* Using ::before and ::after pseudo-elements to customize checkbox appearance */
 
 .to-do-list input[type="checkbox"] + label::before {
-    top: 2px;
+    font-family: icomoon;
+    top: 8px;
     position: absolute;
-    left: -1px;
-    width: 15px;
-    height: 15px;    
-    border-radius: 5px;
+    left: 1px;
     display: inline-block;
-    content: "";
+    vertical-align: middle;
+    content: "\ea53";
     cursor: pointer;
-    border: 2px solid white;
 }
 
 
 /* unchecked state */
+
 .to-do-list input[type="checkbox"] + label::after {
-  position: absolute;
-  top: 4px;
-  left: 1px;
-  width: 15px;
-  height: 16px;
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaDike3R8gLgAAAIlJREFUSMftljEOwCAMAzHi/192p24FkjSGqiITYuAUfEGAZNlRtWyqA/4NuGtuWwC811B3TMt+XXW1yoy5Qy7389eMByET2uuYUWEmNbSajs7C0EjGzIBG5XoNfQIjcbzglQtq6OiqoYTOMoYKapELCqjVamRDPeOE5Ehcc4xMCZtKnvPL/Az4Aj05Fj+Wh7yCAAAAAElFTkSuQmCC");
-  border-radius: 4px;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: inline-block;
-  content: "";
+    font-family: icomoon;
+    position: absolute;
+    top: 8px;
+    left: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "\ea52";
+    opacity: 0;
+    max-width: 0;
+    cursor: pointer;
+    transition: max-width 0s 0.5s, opacity 0.5s;
+}
+
+.to-do-list input[type="checkbox"]:checked + label::before {
   opacity: 0;
-  max-width: 0;
-  cursor: pointer;
-  transition: max-width 0s 0.5s, opacity 0.5s;  
+  transition: all 0.5s;
+  max-width: 20px;
 }
 
 /* checked state */
@@ -532,5 +616,49 @@ blockquote cite {
 .weather,
 td.fahrenheit,
 td.celsius {
+    cursor: pointer;
+}
+
+#credits {
+    
+    position: absolute;
+    bottom: 15px;
+    left: 10px;
+    color: white;
+    text-transform: uppercase;
+}
+#credits .team {
+    margin-bottom: 5px;
+    padding: 5px;
+    background: rgba(80, 80, 95, 0.5);
+    border: none;
+    border-radius: 5px;
+    display:none;
+}
+.team p {
+    text-align: center;
+}
+.team p:first-child {
+    font-weight: bold;
+    text-align: center;
+    text-decoration:underline;
+}
+.team a {
+    color: white;
+    margin-left: 10px;
+    text-decoration: none;
+}
+.creditIcon {
+    font-size: 1.5em;
+    color: lightgray;
+    vertical-align: middle;
+    text-align: left;
+    padding: 6px;
+    
+}
+.creditIcon:hover {
+    color: white;
+    border-color: white;
+    text-shadow: 0 0 10px white;
     cursor: pointer;
 }

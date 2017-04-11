@@ -9,15 +9,6 @@
   <script src="script.js"></script>
 </head>
 <body>
-    <!--<div class="settings">
-        <table>
-            <tr>
-                <td colspan="2">Temperature Units:</td>
-                <td class="fahrenheit tempChoice">Fahrenheit</td>
-                <td class="celsius">Celsius</td>
-            </tr>
-        </table>
-    </div> -->
     <div id="weatherBox">
         <div class="weather"></div>
         <div class="weatherForecast">
@@ -42,6 +33,20 @@
                 </table>
           </div>
     </div>
+    <div class="settings">
+        <div id="settingIcon">
+            <span class="icon-cog cog"></span>
+        </div>
+        <div id="settingList">
+            <ul>
+                <li>SHOW:</li>
+                <li class="setWeather">Weather</li>
+                <li class="setGoal">Goal</li>
+                <li class="setQuote">Quote</li>
+                <li class="setTodo">Todo</li>
+            </ul>
+        </div>
+    </div>
   <div class="time">
     <p class="date"></p>
     <p class="clock"></p>
@@ -60,12 +65,22 @@
         <p>
           <input type="checkbox" id="submittedGoal" value="">
           <label for="submittedGoal"><span></span></label>
-          <button type="button" id="removeDailyGoal"></button>
+          <button type="button" id="removeDailyGoal"><span class="icon-cancel-circle"></span></button>
         </p>
       </fieldset>
     </div>
   </div>
   <blockquote></blockquote>
+    <div id="credits">
+        <div class="team">
+            <p>Tree Lizards</p>
+            <p>Tariel Laelius <a href="https://github.com/tariellaelius/"><span class="icon-github"></span></a></p>
+            <p>Tom Leroy <a href="https://github.com/tlcodes/"><span class="icon-github"></span></a></p>
+        </div>
+        <div class="creditIcon">
+            <span class="icon-embed2"></span>
+        </div>
+    </div>
   <div class="to-do">
   <div class="listContainer">
   <ul class="to-do-list">
@@ -75,6 +90,6 @@
   </form>
   </div>
   </div>  
-  <button type="button" class="showList" id="showList"></button>
+  <button type="button" class="showList" id="showList"><span class="icon-list"></button>
 </body>
 </html>
