@@ -13,6 +13,8 @@ $(function() {
     var $tempUnit;
     var $temperatureSpans;
 
+    var format12;
+    
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = (position.coords.latitude);
@@ -130,7 +132,7 @@ $(function() {
         }
     });
     
-    setInterval(theTime, 1000);
+    
     
     function padZero(n) {
         return n < 10 ? '0' + n : n;
@@ -144,19 +146,22 @@ $(function() {
         var day = now.getDay();
         var today = dayNames[day];
         var month = padZero(now.getMonth() + 1);
-
-        var hours = padZero(now.getHours());
-        var minutes = padZero(now.getMinutes());
-
-        //12 hour clock variables
-        var ampm = hours >= 12 ? 'PM' : 'AM';
-        var usHours = now.getHours() % 12 || 12;
-
+        
+        var hours = now.getHours();
+        var minutes = padZero(now.getMinutes());        
+        
         $datep.html(today + ', ' + month + '/' + date);
-        $clock.html(hours + ':' + minutes);
-        $usClock.html(padZero(usHours) + ':' + minutes);
-        $usClock.append($('<span>').addClass('ampm').text(ampm));
-
+        
+        if(!format12) {
+            $clock.html(padZero(hours) + ':' + minutes);
+        } else {
+            //12 hour clock variables
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            var usHours = hours % 12 || 12;
+            $clock.html(padZero(usHours) + ':' + minutes);
+            $clock.append($('<span>').addClass('ampm').text(ampm));
+        }
+        
     }
 
     // toggle weather forecast
@@ -166,11 +171,9 @@ $(function() {
 
     // Toggle clock to 12 and 24 hour mode
     $('.time').on('click', function() {
-        // get the clock status and store it first
-        var visibool = $clock.hasClass('hide');
-        chrome.storage.local.set({'format24': visibool});
-        $clock.toggleClass('hide');
-        $usClock.toggleClass('hide');
+        format12 = !format12;
+        chrome.storage.local.set({'format12': format12});
+        theTime();
     });    
 
     // Toggle temperature units
@@ -217,15 +220,10 @@ $(function() {
     // check the temp choice on page load
     
     
-    // on page load, check clock status and apply/remove 'hide' class
-    chrome.storage.local.get('format24', function(obj) {
-        if (!obj.format24) {
-            $clock.addClass('hide');
-            $usClock.removeClass('hide');
-        } else {
-            $clock.removeClass('hide');
-            $usClock.addClass('hide');
-        }
+    // on page load, check clock status and apply the appropriate format
+    chrome.storage.local.get('format12', function(obj) {
+        format12 = obj.format12 ? true : false;        
+        setInterval(theTime, 1000);
     });
     
     
@@ -237,7 +235,7 @@ $(function() {
         let newLeft;
         if(currentLeft == '0px') {
             newLeft = '100%';
-            $showList.css('right', '0.5em');
+            $showList.css('right', '0.7em');
             setTimeout(function() {
                 $('.to-do').css('visibility', 'hidden');
             }, 600);
