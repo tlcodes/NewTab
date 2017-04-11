@@ -340,6 +340,8 @@ blockquote {
     text-align: center;
     font-size: 1.3em;
     font-style: italic;
+    max-width:60%;
+    margin:auto;
 }
    
 blockquote cite {
