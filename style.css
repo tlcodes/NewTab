@@ -2,6 +2,7 @@
 body {
     text-align: center;
     background: url("https://source.unsplash.com/category/nature/1600x900/daily") no-repeat center center fixed;
+    background-color: rgba(110,143,154,1);
     font-family: Lato, Helvetica;
     background-size: cover;
     color: white;
