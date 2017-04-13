@@ -34,14 +34,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-tree-lizard:before {
+  content: "\e900";
+}
 .icon-cog:before {
   content: "\e994";
 }
 .icon-list:before {
   content: "\e9ba";
-}
-.icon-info:before {
-  content: "\ea0c";
 }
 .icon-cancel-circle:before {
   content: "\ea0d";
@@ -90,6 +90,7 @@ body {
 #settingList {
     display: none;
     float: right;
+    height: 1.5em;
 }
 
 .settings ul {
@@ -219,8 +220,10 @@ body {
 }
 
 .hide {
-  visibility: hidden;
+  /*visibility: hidden;
   height: 0px;
+  */
+  display: none;
 }
 
 .date {
@@ -238,12 +241,21 @@ body {
     display: none;
     opacity: 0;
     transition: opacity 1s;
+    margin-bottom: 1em;
 }
 
 .goalPrompt > p,
 .submittedGoalContainer > p {
     font-size: 2em;
     text-align:center;
+}
+
+.submittedGoalContainer {
+  margin-bottom: 0.2em;
+}
+
+.submittedGoalContainer > p {
+    margin-bottom: 0.4em;
 }
 
 .mainForm {
@@ -356,23 +368,22 @@ input:-webkit-autofill {
   height: 16px;
   display: inline-block;
   content: "\ea52";
-  opacity: 0;
-  max-width: 0;
+  opacity: 0;  
   cursor: pointer;
-  transition: max-width 0s 0.5s, opacity 0.5s;
+  transition: opacity 0.5s;
 }
 
 /* checked state */
 .submittedGoalContainer input[type="checkbox"]:checked + label::before {
   opacity: 0;
   transition: all 0.5s;
-  max-width: 20px;
+  
 }
 
 .submittedGoalContainer input[type="checkbox"]:checked + label::after {
   opacity: 1;
   transition: all 0.5s;
-  max-width: 20px;
+  
 }
 
 .submittedGoalContainer input[type="checkbox"]:checked + label > span {
@@ -406,13 +417,12 @@ button {
   /*border-radius: 50%;*/
   cursor: pointer;
   font-size: 1em;
-  /*border: 2px solid white;*/
-  padding: 3px 8px 3px 8px;
+  /*border: 2px solid white;*/  
   color: inherit;
   visibility: hidden;
-  position: absolute;
-  top: 4px;
-  right: -24px;
+  position: relative;
+  top: 5px;
+  right: -18px;
   width: 24px;
   height: 24px;
 }
@@ -513,6 +523,7 @@ blockquote cite {
     color:white;
     border-color:white;
     box-shadow: 0 0 10px white;
+    text-shadow: 0 0 10px white;
 }
 
 
@@ -566,23 +577,22 @@ blockquote cite {
     display: inline-block;
     vertical-align: middle;
     content: "\ea52";
-    opacity: 0;
-    max-width: 0;
+    opacity: 0;    
     cursor: pointer;
-    transition: max-width 0s 0.5s, opacity 0.5s;
+    transition: opacity 0.5s;
 }
 
 .to-do-list input[type="checkbox"]:checked + label::before {
   opacity: 0;
   transition: all 0.5s;
-  max-width: 20px;
+
 }
 
 /* checked state */
 .to-do-list input[type="checkbox"]:checked + label::after {
   opacity: 1;
   transition: all 0.5s;
-  max-width: 20px;
+  
 }
 
 .to-do-list input[type="checkbox"]:checked + label > span {
@@ -641,7 +651,8 @@ td.celsius {
 .team p:first-child {
     font-weight: bold;
     text-align: center;
-    text-decoration:underline;
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
 }
 .team a {
     color: white;

@@ -1,5 +1,5 @@
 $(function() {
-
+    
     var $weather = $('.weather');
     var $goalInput = $('.mainForm input');
     var $clock = $('.clock');
@@ -12,28 +12,28 @@ $(function() {
     var $submittedGoal = $('#submittedGoal');
     var $tempUnit;
     var $temperatureSpans;
-
+    
     var format12;
     
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = (position.coords.latitude);
             var longitude = (position.coords.longitude);
-
-
+            
+            
             var yql = 'select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text="('+ latitude + ',' + longitude + ')")';
             var url = "https://query.yahooapis.com/v1/public/yql?q=" + yql + "&format=json";
-
+            
             $.getJSON(url, function(weather) {
-
+                
                 var data = weather.query.results.channel.item.condition;
-
+                
                 // main data (condition, temp, icon, location)
                 var fahr = Math.round(data.temp);                
                 var condition = data.text;
                 var icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
                 var location = weather.query.results.channel.location.city;
-
+                
                 
                 $weather.prepend($('<p>').html(icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
                 $weather.prepend($('<p>').text(location));
@@ -68,13 +68,13 @@ $(function() {
                         });
                     }
                 });
-
+                
             }); // end getJSON
-
+            
         });
     } // end navigator.gelocation
-
-
+    
+    
     // Quotes from forismatic
     var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
     $.getJSON(call, function(quote) {
@@ -83,7 +83,7 @@ $(function() {
         $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
         $quote.append($('<cite>').text('\u007E' + author));
     });
-
+    
     // Hide one element, display another one and do it smoothly
     function transitionSmoothly(toHide, toDisplay) {
         toHide.css('opacity', 0);       // used in conjunction with the css 'transition' property to make it gradually disappear
@@ -95,7 +95,7 @@ $(function() {
             }, 10);                              
         }, 1000);
     }
-
+    
     // attach 'submit' event handler to daily focus prompt
     $('.mainForm').on('submit', function(event) {
         event.preventDefault();     // prevent the page from reloading, which is the default action for 'submit' event
@@ -116,29 +116,14 @@ $(function() {
             $submittedGoalSpan.text('');// containing div to disappear
             $submittedGoal.prop('checked', false);
         }, 1000);
-    });
-
-    // Update the page and other open tabs
-    chrome.storage.onChanged.addListener(function(changes, namespace) {
-        for (key in changes) {
-            var storageChange = changes[key];
-            
-            if(key == "mainGoal") {
-                showDailyGoal(storageChange.newValue);
-            } else if(key == "list") {
-                list = storageChange.newValue;
-                drawList();
-            }
-        }
-    });
-    
+    });    
     
     
     function padZero(n) {
         return n < 10 ? '0' + n : n;
     }
     
-
+    
     function theTime() {
         var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var now = new Date();
@@ -163,7 +148,7 @@ $(function() {
         }
         
     }
-
+    
     // toggle weather forecast
     $weather.on('click', function() {
         $('.weatherForecast').slideToggle(1000);
@@ -178,224 +163,293 @@ $(function() {
     // Show team
     $('.creditIcon').on('click', function() {
         $('.team').slideToggle(1000);
-    })
+    });
     
-    // toggle settings choices
-    // Show/hide weather
-    $('.setWeather').on('click', function() {
-        $('.setWeather').toggleClass('choice');
-        $('#weatherBox').toggleClass('hide');
-        // get temp choice and store it
-        var showWeather = $('.setWeather').hasClass('choice');        
-        chrome.storage.local.set({'showWeather': showWeather});
-    });
-    // Show/hide main goal
-    $('.setGoal').on('click', function() {
-        $('.setGoal').toggleClass('choice');
-        $('.todaysGoal').toggleClass('hide');
-        // get temp choice and store it
-        var showGoal = $('.setGoal').hasClass('choice');        
-        chrome.storage.local.set({'showGoal': showGoal});
-    });
-    // Show/Hide quote
-    $('.setQuote').on('click', function() {
-        $('.setQuote').toggleClass('choice');
-        $('blockquote').toggleClass('hide');
-        // get temp choice and store it
-        var showQuote = $('.setQuote').hasClass('choice');        
-        chrome.storage.local.set({'showQuote': showQuote});
-    });
-    // Show/Hide todo list
-    $('.setTodo').on('click', function() {
-        $('.setTodo').toggleClass('choice');
-        $('#showList').toggleClass('hide');
-        // get temp choice and store it
-        var showTodo = $('.setTodo').hasClass('choice');        
-        chrome.storage.local.set({'showTodo': showTodo});
-    });
+    var panels = [['hideGoal', $('.todaysGoal'), $('.setGoal')],
+  ['hideWeather', $('#weatherBox'), $('.setWeather')],
+  ['hideQuote', $('blockquote'), $('.setQuote')],
+  ['hideTodo', $('#showList'), $('.setTodo')]];
+  
+  // Attach event listeners to setting buttons
+  panels.forEach(function(panel) {
+      panel[2].on('click', function() {
+          panel[2].toggleClass('choice');
+          panel[1].toggleClass('hide');
+          // get the current state and store it as a setting
+          let state = panel[1].hasClass('hide');
+          chrome.storage.local.set({[panel[0]] : state});
+          //             let test = {[panel[0]] : state};
+          //             console.log(test);
+      });
+  });
+  
+  // toggle settings choices
+  // Show/hide weather
+  //     $('.setWeather').on('click', function() {
+  //         $('.setWeather').toggleClass('choice');
+  //         $('#weatherBox').toggleClass('hide');
+  //         // get temp choice and store it
+  //         var hideWeather = $('.setWeather').hasClass('choice');        
+  //         chrome.storage.local.set({'hideWeather': hideWeather});
+  //     });
+  //     // Show/hide main goal
+  //     $('.setGoal').on('click', function() {
+  //         $('.setGoal').toggleClass('choice');
+  //         $('.todaysGoal').toggleClass('hide');
+  //         // get temp choice and store it
+  //         var hideGoal = $('.setGoal').hasClass('choice');        
+  //         chrome.storage.local.set({'hideGoal': hideGoal});
+  //     });
+  //     // Show/Hide quote
+  //     $('.setQuote').on('click', function() {
+  //         $('.setQuote').toggleClass('choice');
+  //         $('blockquote').toggleClass('hide');
+  //         // get temp choice and store it
+  //         var hideQuote = $('.setQuote').hasClass('choice');        
+  //         chrome.storage.local.set({'hideQuote': hideQuote});
+  //     });
+  //     // Show/Hide todo list
+  //     $('.setTodo').on('click', function() {
+  //         $('.setTodo').toggleClass('choice');
+  //         $('#showList').toggleClass('hide');
+  //         // get temp choice and store it
+  //         var hideTodo = $('.setTodo').hasClass('choice');        
+  //         chrome.storage.local.set({'hideTodo': hideTodo});
+  //     });
+  
+  // Toggle clock to 12 and 24 hour mode
+  $('.time').on('click', function() {
+      format12 = !format12;
+                chrome.storage.local.set({'format12': format12});
+      theTime();
+  });    
+  
+  // Toggle temperature units
+  $('tfoot').on('click', function() {
+      $('.fahrenheit, .celsius').toggleClass('choice');        
+      // get temp choice and store it
+      var celsBool = $('.celsius').hasClass('choice');        
+      
+      chrome.storage.local.set({'celsBool': celsBool});
+      
+      if (celsBool) {
+          $tempUnit.text('C');
+          $temperatureSpans.each(function() {
+              $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
+          });
+      } else {
+          $tempUnit.text('F');
+          $temperatureSpans.each(function() {
+              $(this).text(Math.round(($(this).text() * 1.8) + 32));
+          });
+      }        
+  });    
+  
+  
+  // on page load, check if there is previous text stored
+  chrome.storage.local.get('mainGoal', function(response) {
+      var obj = response.mainGoal;
+      showDailyGoal(obj);
+  });
+  
+  
+  // on page load, check clock status and apply the appropriate format
+  chrome.storage.local.get('format12', function(obj) {
+      format12 = obj.format12 ? true : false;        
+                           setInterval(theTime, 1000);
+  });
+  
+  
+  function renderPanel(name, panel, setter) {
+      chrome.storage.local.get(name, function(obj) {
+          if(!obj[name]) {
+              panel.removeClass('hide');
+              setter.addClass('choice');
+          } else {                
+              panel.addClass('hide');
+              setter.removeClass('choice');
+          }
+      });
+      
+  }  
+  
+  
+  // Show/hide panels on page load
+  panels.forEach(function(panel) {
+      renderPanel(panel[0], panel[1], panel[2]);
+  });
+  
+  
+/*     
+  // Show/Hide weather on page load
+  chrome.storage.local.get('showWeather', function(obj) {
+      if (obj.showWeather) {
+          $('#weatherBox').removeClass('hide');
+          $('.setWeather').addClass('choice');
+          
+      } else {
+          $('#weatherBox').addClass('hide');
+          $('.setWeather').removeClass('choice');
+      }
+  });
+  
+  
+  // Show/Hide Goal on page load
+  chrome.storage.local.get('showGoal', function(obj) {
+      if (obj.showGoal) {
+          $('.todaysGoal').removeClass('hide');
+          $('.setGoal').addClass('choice');
+      } else {
+          $('.todaysGoal').addClass('hide');
+          $('.setGoal').removeClass('choice');
+      }
+  });
+  
+  
+      
+  // Show/Hide Quote on page load
+  chrome.storage.local.get('showQuote', function(obj) {
+      if (obj.showQuote) {
+          $('blockquote').removeClass('hide');
+          $('.setQuote').addClass('choice');
+          
+      } else {
+          $('blockquote').addClass('hide');
+          $('.setQuote').removeClass('choice');
+      }
+  });
+  
+  // Show/Hide Quote on page load
+  chrome.storage.local.get('showTodo', function(obj) {
+      if (obj.showTodo) {
+          $('#showList').removeClass('hide');
+          $('.setTodo').addClass('choice');
+      } else {
+          $('#showList').addClass('hide');
+          $('.setTodo').removeClass('choice');
+      }
+  });
+*/  
 
-    // Toggle clock to 12 and 24 hour mode
-    $('.time').on('click', function() {
-        format12 = !format12;
-        chrome.storage.local.set({'format12': format12});
-        theTime();
-    });    
-
-    // Toggle temperature units
-    $('tfoot').on('click', function() {
-        $('.fahrenheit, .celsius').toggleClass('choice');        
-        // get temp choice and store it
-        var celsBool = $('.celsius').hasClass('choice');        
-
-        chrome.storage.local.set({'celsBool': celsBool});
-
-        if (celsBool) {
-            $tempUnit.text('C');
-            $temperatureSpans.each(function() {
-                $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
-            });
-        } else {
-            $tempUnit.text('F');
-            $temperatureSpans.each(function() {
-                $(this).text(Math.round(($(this).text() * 1.8) + 32));
-            });
-        }        
-    });    
-    
-    
-    // on page load, check if there is previous text stored
-    chrome.storage.local.get('mainGoal', function(response) {
-        var obj = response.mainGoal;
-        showDailyGoal(obj);
-    });
-    
-
-    // on page load, check clock status and apply the appropriate format
-    chrome.storage.local.get('format12', function(obj) {
-        format12 = obj.format12 ? true : false;        
-        setInterval(theTime, 1000);
-    });
-    
-    // Show/Hide weather on page load
-    chrome.storage.local.get('showWeather', function(obj) {
-        if (obj.showWeather) {
-            $('#weatherBox').removeClass('hide');
-            $('.setWeather').addClass('choice');
-            
-        } else {
-            $('#weatherBox').addClass('hide');
-            $('.setWeather').removeClass('choice');
-        }
-    });
-    
-    
-    // Show/Hide Goal on page load
-    chrome.storage.local.get('showGoal', function(obj) {
-        if (obj.showGoal) {
-            $('.todaysGoal').removeClass('hide');
-            $('.setGoal').addClass('choice');
-        } else {
-            $('.todaysGoal').addClass('hide');
-            $('.setGoal').removeClass('choice');
-        }
-    });
-    
-    // Show/Hide Quote on page load
-    chrome.storage.local.get('showQuote', function(obj) {
-        if (obj.showQuote) {
-            $('blockquote').removeClass('hide');
-            $('.setQuote').addClass('choice');
-        } else {
-            $('blockquote').addClass('hide');
-            $('.setQuote').removeClass('choice');
-        }
-    });
-    
-    // Show/Hide Quote on page load
-    chrome.storage.local.get('showTodo', function(obj) {
-        if (obj.showTodo) {
-            $('#showList').removeClass('hide');
-            $('.setTodo').addClass('choice');
-        } else {
-            $('#showList').addClass('hide');
-            $('.setTodo').removeClass('choice');
-        }
-    });
-
-     function showDailyGoal(obj) {        
-        if(obj && obj.text) {                         // if there is already a stored text, display it            
-            $submittedGoalSpan.text(obj.text);          
-            $submittedGoal.prop('checked', obj.checked);
-            transitionSmoothly($goalPrompt, $submittedGoalContainer);
-        } else {      // otherwise, display the prompt
-            $submittedGoalSpan.text('');
-            $submittedGoal.prop('checked', false);            
-            transitionSmoothly($submittedGoalContainer, $goalPrompt);
-        }
-    }
-    
-    
-    var $listContainer = $('.to-do .listContainer');
-    var $showList = $("#showList");
-    
-    $showList.on('click', function() {    
-        let currentLeft = $listContainer.css("left");
-        let newLeft;
-        if(currentLeft == '0px') {
-            newLeft = '100%';
-            $showList.css('right', '0.7em');
-            setTimeout(function() {
-                $('.to-do').css('visibility', 'hidden');
-            }, 600);
-        }
-        else {
-            newLeft = '0px';
-            $showList.css('right', '7em');
-            setTimeout(function() {
-                $('#addNote').focus();
-            }, 700);
-            $('.to-do').css('visibility', 'visible');
-        }
-        $listContainer.animate({
-            "left": newLeft
-        }, 500);    
-    });
-    
-    var currentID = 0;
-    var $list = $('.to-do-list');
-    var list = [];
-
-    
-    
-    function addItem(item) {
-        var idNum = currentID;
-        var id = 'item' + currentID;
-        let $checkbox = $('<input type="checkbox">').attr('id', id).prop('checked', item.checked);
-        $checkbox.on('change', function() {
-            list[idNum].checked = this.checked;
-            chrome.storage.local.set({ 'list': list });
-        });
-        var $span = $('<span></span>').text(item.text);
-        let $label = $('<label>').attr('for', id);
-        $label.append($span);
-        var $button = $('<button type="button"><span class="icon-cancel-circle"></button>');
-        $button.on('click', function() {
-            list.splice(idNum, 1);
-            chrome.storage.local.set({'list': list});
-        });
-        var $container = $('<li></li>').append($checkbox, $label, $button);
-        $list.append($container);
-        currentID++;
-    }
-    
-    function drawList() {
-        currentID = 0;
-        $list.empty();
-        chrome.storage.local.get('list', function(obj) {
-            if(obj.list) {                
-                list = obj.list;
-                list.forEach(addItem);        
-            }
-        });        
-    }
-    
-    var $addNote = $('#addNote');
-    
-    $('#noteForm').on('submit', function(event) {
-        event.preventDefault();
-        let text = $addNote.val();
-        list.push({ text: text, checked: false });
-        chrome.storage.local.set({'list': list});             
-        $addNote.val('');        
-    }); 
-    
-    
-    $submittedGoal.on('change', function() {
-        var that = this;
-        chrome.storage.local.get('mainGoal', function(response) {
-            chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
-        });      
-    });
-    
-     drawList();    
+  function showDailyGoal(obj) {        
+      if(obj && obj.text) {                         // if there is already a stored text, display it            
+          $submittedGoalSpan.text(obj.text);          
+          $submittedGoal.prop('checked', obj.checked);
+          transitionSmoothly($goalPrompt, $submittedGoalContainer);
+      } else {      // otherwise, display the prompt
+          $submittedGoalSpan.text('');
+          $submittedGoal.prop('checked', false);            
+          transitionSmoothly($submittedGoalContainer, $goalPrompt);
+      }
+  }
+  
+  
+  var $listContainer = $('.to-do .listContainer');
+  var $showList = $("#showList");
+  
+  $showList.on('click', function() {    
+      let currentLeft = $listContainer.css("left");
+      let newLeft;
+      if(currentLeft == '0px') {
+          newLeft = '100%';
+          $showList.css('right', '0.7em');
+          setTimeout(function() {
+              $('.to-do').css('visibility', 'hidden');
+          }, 600);
+      }
+      else {
+          newLeft = '0px';
+          $showList.css('right', '7.6em');
+          setTimeout(function() {
+              $('#addNote').focus();
+          }, 700);
+          $('.to-do').css('visibility', 'visible');
+      }
+      $listContainer.animate({
+          "left": newLeft
+      }, 500);    
+  });
+  
+  var currentID = 0;
+  var $list = $('.to-do-list');
+  var list = [];
+  
+  
+  
+  function addItem(item) {
+      var idNum = currentID;
+      var id = 'item' + currentID;
+      let $checkbox = $('<input type="checkbox">').attr('id', id).prop('checked', item.checked);
+      $checkbox.on('change', function() {
+          list[idNum].checked = this.checked;
+          chrome.storage.local.set({ 'list': list });
+      });
+      var $span = $('<span></span>').text(item.text);
+      let $label = $('<label>').attr('for', id);
+      $label.append($span);
+      var $button = $('<button type="button"><span class="icon-cancel-circle"></button>');
+      $button.on('click', function() {
+          list.splice(idNum, 1);
+          chrome.storage.local.set({'list': list});
+      });
+      var $container = $('<li></li>').append($checkbox, $label, $button);
+      $list.append($container);
+      currentID++;
+  }
+  
+  function drawList() {
+      currentID = 0;
+      $list.empty();
+      chrome.storage.local.get('list', function(obj) {
+          if(obj.list) {                
+              list = obj.list;
+              list.forEach(addItem);        
+          }
+      });        
+  }
+  
+  var $addNote = $('#addNote');
+  
+  $('#noteForm').on('submit', function(event) {
+      event.preventDefault();
+      let text = $addNote.val();
+      list.push({ text: text, checked: false });
+      chrome.storage.local.set({'list': list});             
+      $addNote.val('');        
+  }); 
+  
+  
+  $submittedGoal.on('change', function() {
+      var that = this;
+      chrome.storage.local.get('mainGoal', function(response) {
+          chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
+      });      
+  });
+  
+  
+  // Update the page and other open tabs
+  chrome.storage.onChanged.addListener(function(changes, namespace) {
+      for (key in changes) {
+          var storageChange = changes[key];
+          
+          if(key == "mainGoal") {
+              showDailyGoal(storageChange.newValue);
+          } else if(key == "list") {
+              list = storageChange.newValue;
+              drawList();
+          } else {
+              // 'some' is used instead of 'forEach' in order to break out of the loop at the first match
+              // as it will be the only match anyways
+              panels.some(function(panel) {
+                  if(key === panel[0]) {
+                      renderPanel(panel[0], panel[1], panel[2]);
+                      return true;
+                  }
+              });
+          }            
+      }
+  });
+  
+  
+  drawList();    
 });
