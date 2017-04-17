@@ -31,11 +31,121 @@ $(function() {
                 // main data (condition, temp, icon, location)
                 var fahr = Math.round(data.temp);                
                 var condition = data.text;
-                var icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
+                //var icon = "<img src='http://l.yimg.com/a/i/us/we/52/" + data.code + ".gif'> ";
+                function setWicon(weatherCode) {
+  var wicon = '';
+      switch(weatherCode) {
+        case '0': wicon  = 'tornado';
+          break;
+        case '1': wicon = 'tropical-storm';
+          break;
+        case '2': wicon = 'hurricane';
+          break;
+        case '3': wicon = 'severe-thunderstorms';
+          break;
+        case '4': wicon = 'thunderstorms';
+          break;
+        case '5': wicon = 'mixed-rain-snow';
+          break;
+        case '6': wicon = 'mixed-rain-sleet';
+          break;
+        case '7': wicon = 'mixed-snow-sleet';
+          break;
+        case '8': wicon = 'freezing-drizzle';
+          break;
+        case '9': wicon = 'drizzle';
+          break;
+        case '10': wicon = 'freezing-rain';
+          break;
+        case '11': wicon = 'shower-drizzle';
+          break;
+        case '12': wicon = 'shower-rain';
+          break;
+        case '13': wicon = 'snow-flurries';
+          break;
+        case '14': wicon = 'light-scattered-snow-showers';
+          break;
+        case '15': wicon = 'blowing-snow';
+          break;
+        case '16': wicon = 'snow';
+          break;
+        case '17': wicon = 'hail';
+          break;
+        case '18': wicon = 'sleet';
+          break;
+        case '19': wicon = 'dust';
+          break;
+        case '20': wicon = 'fog';
+          break;
+        case '21': wicon = 'haze';
+          break;
+        case '22': wicon = 'smoky';
+          break;
+        case '23': wicon = 'blustery';
+          break;
+        case '24': wicon = 'windy';
+          break;
+        case '25': wicon = 'cold';
+          break;
+        case '26': wicon = 'cloudy';
+          break;
+        case '27': wicon = 'mostly-cloudy-night';
+          break;
+        case '28': wicon = 'mostly-cloudy-day';
+          break;
+        case '29': wicon = 'partly-cloudy-night';
+          break;
+        case '30': wicon = 'partly-cloudy-day';
+          break;
+        case '31': wicon = 'clear-night';
+          break;
+        case '32': wicon = 'sunny';
+          break;
+        case '33': wicon = 'fair-night';
+          break;
+        case '34': wicon = 'fair-day';
+          break;
+        case '35': wicon = 'mixed-rain-hail';
+          break;
+        case '36': wicon = 'hot';
+          break;
+        case '37': wicon = 'isolated-thunderstorm';
+          break;
+        case '38': wicon = 'scattered-thunderstorms';
+          break;
+        case '39': wicon = 'scattered-thunderstorms2';
+          break;
+        case '40': wicon = 'scattered-showers';
+          break;
+        case '41': wicon = 'heavy-shower-snow';
+          break;
+        case '42': wicon = 'light-scattered-snow-showers';
+          break;
+        case '43': wicon = 'heavy-shower-snow';
+          break;
+        case '44': wicon = 'unavailable';
+          break;
+        case '45': wicon = 'thundershowers';
+          break;
+        case '46': wicon = 'snow-showers';
+          break;
+        case '47': wicon = 'isolated-thunderstorms2';
+          break;
+        case '3200': wicon = 'unavailable';
+          break;
+        default: wicon = 'unavailable';
+          break;
+      }
+  
+      return '<span class="wicon icon-'+wicon+'"></span>';
+}
+                var icon = setWicon(data.code);
+                
+                
                 var location = weather.query.results.channel.location.city;
                 
                 
-                $weather.prepend($('<p>').html(icon + '<span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
+                $weather.prepend($('<p>').html(icon + ' <span class="temp">' + fahr + '</span>\u00B0 <span class="tempUnit">F</span>'));
                 $weather.prepend($('<p>').text(location));
                 
                 // 10 day forecast (array of objects)
@@ -48,7 +158,8 @@ $(function() {
                         '<td>' + forecast[i].day + ' ' + forecast[i].date.substring(3,7) + forecast[i].date.substring(0,2) + '<br>' + forecast[i].text + '</td>' + 
                         '<td><span class="temp">' + forecast[i].low + '</span>\u00B0 <span class="tempUnit">F</span></td>' + 
                         '<td><span class="temp">' + forecast[i].high + '</span>\u00B0 <span class="tempUnit">F</span></td>' + 
-                        '<td>' + "<img src='http://l.yimg.com/a/i/us/we/52/" + forecast[i].code  + ".gif'></td>"
+                        '<td>' + setWicon(forecast[i].code) + '</td>'
+                        //'<td>' + "<img src='http://l.yimg.com/a/i/us/we/52/" + forecast[i].code  + ".gif'></td>"
                     ));
                 }
                 
