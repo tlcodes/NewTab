@@ -15,6 +15,22 @@ $(function() {
     
     var format12;
     
+    // Check if localStorage is supported and available
+    
+    var storageIsAvailable = function storageAvailable(type) {
+	try {
+		var storage = window[type],
+			x = '__storage_test__';
+		storage.setItem(x, x);
+		storage.removeItem(x);
+		return true;
+	}
+	catch(e) {
+		return false;
+	}
+}('localStorage');
+    
+    
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = (position.coords.latitude);
@@ -55,6 +71,20 @@ $(function() {
                 $temperatureSpans = $('#weatherBox .temp');
                 $tempUnit = $('.tempUnit');
                 
+                if(storageIsAvailable) {
+                    if(!localStorage.getItem('celsBool')) {
+                        // Choice defaults to Fahrenheit units
+                        $('.fahrenheit').addClass('choice');
+                        $tempUnit.text('F');
+                    } else {
+                        $('.celsius').addClass('choice');
+                        $tempUnit.text('C');
+                        $temperatureSpans.each(function() {
+                            $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
+                        });
+                    }
+                }
+                /*
                 chrome.storage.local.get('celsBool', function(obj) {    
                     if (!obj.celsBool) {                        
                         // need to get the value because variables are in local getJSON weather scope                        
@@ -67,7 +97,7 @@ $(function() {
                             $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
                         });
                     }
-                });
+                });*/
                 
             }); // end getJSON
             
@@ -101,16 +131,27 @@ $(function() {
         event.preventDefault();     // prevent the page from reloading, which is the default action for 'submit' event
         var goal = $goalInput.val();
         if(goal) {                  // ensure that the input is not empty
-            chrome.storage.local.set({'mainGoal': { text: goal, checked: false }});     // store the input text
+            if(storageIsAvailable) {
+                localStorage.setItem('mainGoal', { text: goal, checked: false });   // store the input text
+            }
             $submittedGoalSpan.text(goal);
             transitionSmoothly($goalPrompt, $submittedGoalContainer);
+            /*
+            chrome.storage.local.set({'mainGoal': { text: goal, checked: false }});     
+            $submittedGoalSpan.text(goal);
+            transitionSmoothly($goalPrompt, $submittedGoalContainer);*/
         }        
     });
     
     // attach event handler to the 'x' button to remove the daily focus
     $('#removeDailyGoal').on('click', function() {
         $goalInput.val('');
-        chrome.storage.local.set({'mainGoal': ''});    // remove the daily focus text from the storage
+        if(storageIsAvailable) {
+            localStorage.setItem('mainGoal', '');  // remove the daily focus text from the storage
+        }
+        /*
+         * chrome.storage.local.set({'mainGoal': ''});
+         */
         transitionSmoothly($submittedGoalContainer, $goalPrompt);
         setTimeout(function() {                         // set the checkbox contents to nothing and reset its 'checked' property after enough time has passed, allowing the
             $submittedGoalSpan.text('');// containing div to disappear
@@ -177,7 +218,12 @@ $(function() {
           panel[1].toggleClass('hide');
           // get the current state and store it as a setting
           let state = panel[1].hasClass('hide');
+          if(storageIsAvailable) {
+              localStorage.setItem(panel[0], state);
+          }
+          /*
           chrome.storage.local.set({[panel[0]] : state});
+      */
           //             let test = {[panel[0]] : state};
           //             console.log(test);
       });
@@ -220,7 +266,12 @@ $(function() {
   // Toggle clock to 12 and 24 hour mode
   $('.time').on('click', function() {
       format12 = !format12;
-                chrome.storage.local.set({'format12': format12});
+      if(storageIsAvailable) {
+          localStorage.setItem('format12', format12);
+      }
+      /*
+      chrome.storage.local.set({'format12': format12});
+      */
       theTime();
   });    
   
@@ -229,8 +280,12 @@ $(function() {
       $('.fahrenheit, .celsius').toggleClass('choice');        
       // get temp choice and store it
       var celsBool = $('.celsius').hasClass('choice');        
-      
+      if(storageIsAvailable) {
+          localStorage.setItem('celsBool', celsBool);
+      }
+      /*
       chrome.storage.local.set({'celsBool': celsBool});
+      */
       
       if (celsBool) {
           $tempUnit.text('C');
@@ -247,20 +302,48 @@ $(function() {
   
   
   // on page load, check if there is previous text stored
+  if(storageIsAvailable) {
+      // Show the goal prompt or the stored goal text
+      showDailyGoal(localStorage.getItem('mainGoal')); 
+      
+      // Get the preffered time format setting, if already set, otherwise default to 24h format
+      format12 = localStorage.getItem('format12') ? true : false;
+  
+      // Start the clock
+      setInterval(theTime, 1000);
+  
+      // Show/hide panels on page load
+      panels.forEach(function(panel) {
+      renderPanel(panel[0], panel[1], panel[2]);          
+    });
+  }
+  
+  /*
   chrome.storage.local.get('mainGoal', function(response) {
       var obj = response.mainGoal;
       showDailyGoal(obj);
   });
-  
+  */
   
   // on page load, check clock status and apply the appropriate format
+  /*
   chrome.storage.local.get('format12', function(obj) {
       format12 = obj.format12 ? true : false;        
                            setInterval(theTime, 1000);
   });
-  
+  */
   
   function renderPanel(name, panel, setter) {
+      
+      if(!localStorage.getItem(name)) {
+          panel.removeClass('hide');
+          setter.addClass('choice');
+      } else {
+          panel.addClass('hide');
+          setter.removeClass('choice');
+      }
+  
+      /*
       chrome.storage.local.get(name, function(obj) {
           if(!obj[name]) {
               panel.removeClass('hide');
@@ -270,14 +353,9 @@ $(function() {
               setter.removeClass('choice');
           }
       });
-      
+      */
   }  
-  
-  
-  // Show/hide panels on page load
-  panels.forEach(function(panel) {
-      renderPanel(panel[0], panel[1], panel[2]);
-  });
+
   
   
 /*     
@@ -382,7 +460,10 @@ $(function() {
       let $checkbox = $('<input type="checkbox">').attr('id', id).prop('checked', item.checked);
       $checkbox.on('change', function() {
           list[idNum].checked = this.checked;
+          localStorage.setItem('list', list);
+          /*
           chrome.storage.local.set({ 'list': list });
+          */
       });
       var $span = $('<span></span>').text(item.text);
       let $label = $('<label>').attr('for', id);
@@ -390,7 +471,8 @@ $(function() {
       var $button = $('<button type="button"><span class="icon-cancel-circle"></button>');
       $button.on('click', function() {
           list.splice(idNum, 1);
-          chrome.storage.local.set({'list': list});
+          localStorage.setItem('list', list);
+//           chrome.storage.local.set({'list': list});
       });
       var $container = $('<li></li>').append($checkbox, $label, $button);
       $list.append($container);
@@ -400,12 +482,19 @@ $(function() {
   function drawList() {
       currentID = 0;
       $list.empty();
+      let storedList = localStorage.getItem('list');
+      if(storedList) {
+          list = storedList;
+          list.forEach(addItem);
+      }
+      /*
       chrome.storage.local.get('list', function(obj) {
           if(obj.list) {                
               list = obj.list;
               list.forEach(addItem);        
           }
-      });        
+      });
+    */
   }
   
   var $addNote = $('#addNote');
@@ -414,20 +503,30 @@ $(function() {
       event.preventDefault();
       let text = $addNote.val();
       list.push({ text: text, checked: false });
-      chrome.storage.local.set({'list': list});             
+      if(storageIsAvailable) {
+          localStorage.setItem('list', list);
+      }
+//       chrome.storage.local.set({'list': list});             
       $addNote.val('');        
   }); 
   
   
   $submittedGoal.on('change', function() {
       var that = this;
+      // First get the stored text from the storage to assign it back to it together with the current state of the checkbox  
+      if(storageIsAvailable)
+          localStorage.setItem('mainGoal', { text: localStorage.getItem('mainGoal').text, checked: this.checked });
+      /*
       chrome.storage.local.get('mainGoal', function(response) {
           chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
-      });      
+      });
+      */
   });
   
   
   // Update the page and other open tabs
+  
+  /*
   chrome.storage.onChanged.addListener(function(changes, namespace) {
       for (key in changes) {
           var storageChange = changes[key];
@@ -449,7 +548,7 @@ $(function() {
           }            
       }
   });
-  
-  
-  drawList();    
+  */
+  if(storageIsAvailable)
+      drawList();    
 });
