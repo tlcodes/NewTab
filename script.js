@@ -515,7 +515,7 @@ $(function() {
       var that = this;
       // First get the stored text from the storage to assign it back to it together with the current state of the checkbox  
       if(storageIsAvailable)
-          localStorage.setItem('mainGoal', JSON.stringify({ text: localStorage.getItem('mainGoal').text, checked: this.checked }));
+          localStorage.setItem('mainGoal', JSON.stringify({ text: JSON.parse(localStorage.getItem('mainGoal')).text, checked: this.checked }));
       /*
       chrome.storage.local.get('mainGoal', function(response) {
           chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
