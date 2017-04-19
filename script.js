@@ -132,7 +132,7 @@ $(function() {
         var goal = $goalInput.val();
         if(goal) {                  // ensure that the input is not empty
             if(storageIsAvailable) {
-                localStorage.setItem('mainGoal', { text: goal, checked: false });   // store the input text
+                localStorage.setItem('mainGoal', JSON.stringify({ text: goal, checked: false }));   // store the input text
             }
             $submittedGoalSpan.text(goal);
             transitionSmoothly($goalPrompt, $submittedGoalContainer);
@@ -304,7 +304,7 @@ $(function() {
   // on page load, check if there is previous text stored
   if(storageIsAvailable) {
       // Show the goal prompt or the stored goal text
-      showDailyGoal(localStorage.getItem('mainGoal')); 
+      showDailyGoal(JSON.parse(localStorage.getItem('mainGoal'))); 
       
       // Get the preffered time format setting, if already set, otherwise default to 24h format
       format12 = localStorage.getItem('format12') ? true : false;
@@ -460,7 +460,7 @@ $(function() {
       let $checkbox = $('<input type="checkbox">').attr('id', id).prop('checked', item.checked);
       $checkbox.on('change', function() {
           list[idNum].checked = this.checked;
-          localStorage.setItem('list', list);
+          localStorage.setItem('list', JSON.stringify(list));
           /*
           chrome.storage.local.set({ 'list': list });
           */
@@ -471,7 +471,7 @@ $(function() {
       var $button = $('<button type="button"><span class="icon-cancel-circle"></button>');
       $button.on('click', function() {
           list.splice(idNum, 1);
-          localStorage.setItem('list', list);
+          localStorage.setItem('list', JSON.stringify(list));
 //           chrome.storage.local.set({'list': list});
       });
       var $container = $('<li></li>').append($checkbox, $label, $button);
@@ -482,7 +482,7 @@ $(function() {
   function drawList() {
       currentID = 0;
       $list.empty();
-      let storedList = localStorage.getItem('list');
+      let storedList = JSON.parse(localStorage.getItem('list'));
       if(storedList) {
           list = storedList;
           list.forEach(addItem);
@@ -504,7 +504,7 @@ $(function() {
       let text = $addNote.val();
       list.push({ text: text, checked: false });
       if(storageIsAvailable) {
-          localStorage.setItem('list', list);
+          localStorage.setItem('list', JSON.stringify(list));
       }
 //       chrome.storage.local.set({'list': list});             
       $addNote.val('');        
@@ -515,7 +515,7 @@ $(function() {
       var that = this;
       // First get the stored text from the storage to assign it back to it together with the current state of the checkbox  
       if(storageIsAvailable)
-          localStorage.setItem('mainGoal', { text: localStorage.getItem('mainGoal').text, checked: this.checked });
+          localStorage.setItem('mainGoal', JSON.stringify({ text: localStorage.getItem('mainGoal').text, checked: this.checked }));
       /*
       chrome.storage.local.get('mainGoal', function(response) {
           chrome.storage.local.set({ 'mainGoal': {text: response.mainGoal.text, checked: that.checked }});
