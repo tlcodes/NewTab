@@ -8,6 +8,6 @@
 	"storage"
 	],
     "chrome_url_overrides": {
-        "newtab": "ournewtab.html"
+        "newtab": "index.html"
     }
 }
