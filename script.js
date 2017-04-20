@@ -473,6 +473,7 @@ $(function() {
           list.splice(idNum, 1);
           localStorage.setItem('list', JSON.stringify(list));
 //           chrome.storage.local.set({'list': list});
+          drawList();    
       });
       var $container = $('<li></li>').append($checkbox, $label, $button);
       $list.append($container);
@@ -507,7 +508,9 @@ $(function() {
           localStorage.setItem('list', JSON.stringify(list));
       }
 //       chrome.storage.local.set({'list': list});             
-      $addNote.val('');        
+      $addNote.val('');    
+      if(storageIsAvailable)
+          drawList();    
   }); 
   
   
@@ -527,10 +530,14 @@ $(function() {
   // Update other open tabs
   
   window.addEventListener('storage', function (e) {
-      if(e.key == "mainGoal") 
-          showDailyGoal(e.newValue);
+      if(e.key == "mainGoal") {
+          if(e.newValue)        // If not an empty string, then it's a JSON-encoded object
+              showDailyGoal(JSON.parse(e.newValue));
+          else
+              showDailyGoal('');
+      }
       else if(e.key == "list") {
-          list = e.newValue;
+          list = JSON.parse(e.newValue);
           drawList();
       } else {
               // 'some' is used instead of 'forEach' in order to break out of the loop at the first match
