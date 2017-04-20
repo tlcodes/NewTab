@@ -17,7 +17,7 @@ $(function() {
     
     // Check if localStorage is supported and available
     
-    var storageIsAvailable = function storageAvailable(type) {
+    var storageIsAvailable = (function storageAvailable(type) {
 	try {
 		var storage = window[type],
 			x = '__storage_test__';
@@ -28,7 +28,7 @@ $(function() {
 	catch(e) {
 		return false;
 	}
-}('localStorage');
+})('localStorage');
     
     
     if(navigator.geolocation) {
@@ -72,16 +72,16 @@ $(function() {
                 $tempUnit = $('.tempUnit');
                 
                 if(storageIsAvailable) {
-                    if(!localStorage.getItem('celsBool')) {
-                        // Choice defaults to Fahrenheit units
-                        $('.fahrenheit').addClass('choice');
-                        $tempUnit.text('F');
-                    } else {
+                    if(localStorage.getItem('celsBool') == "true") {
                         $('.celsius').addClass('choice');
                         $tempUnit.text('C');
                         $temperatureSpans.each(function() {
                             $(this).text(Math.round(($(this).text() - 32 ) / 1.8));
                         });
+                    } else {
+                        // Choice defaults to Fahrenheit units
+                        $('.fahrenheit').addClass('choice');
+                        $tempUnit.text('F');
                     }
                 }
                 /*
@@ -307,7 +307,7 @@ $(function() {
       showDailyGoal(JSON.parse(localStorage.getItem('mainGoal'))); 
       
       // Get the preffered time format setting, if already set, otherwise default to 24h format
-      format12 = localStorage.getItem('format12') ? true : false;
+      format12 = localStorage.getItem('format12') == "true" ? true : false;
   
       // Start the clock
       setInterval(theTime, 1000);
@@ -335,12 +335,12 @@ $(function() {
   
   function renderPanel(name, panel, setter) {
       
-      if(!localStorage.getItem(name)) {
-          panel.removeClass('hide');
-          setter.addClass('choice');
-      } else {
+      if(localStorage.getItem(name) == "true") {
           panel.addClass('hide');
           setter.removeClass('choice');
+      } else {
+          panel.removeClass('hide');
+          setter.addClass('choice');
       }
   
       /*
