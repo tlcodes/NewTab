@@ -524,7 +524,26 @@ $(function() {
   });
   
   
-  // Update the page and other open tabs
+  // Update other open tabs
+  
+  window.addEventListener('storage', function (e) {
+      if(e.key == "mainGoal") 
+          showDailyGoal(e.newValue);
+      else if(e.key == "list") {
+          list = e.newValue;
+          drawList();
+      } else {
+              // 'some' is used instead of 'forEach' in order to break out of the loop at the first match
+              // as it will be the only match anyways
+              panels.some(function(panel) {
+                  if(e.key === panel[0]) {
+                      renderPanel(panel[0], panel[1], panel[2]);
+                      return true;
+                  }
+              });
+      }
+  });
+  
   
   /*
   chrome.storage.onChanged.addListener(function(changes, namespace) {
