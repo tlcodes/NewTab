@@ -106,13 +106,13 @@ $(function() {
     
     
     // Quotes from forismatic
-    var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
-    $.getJSON(call, function(quote) {
-        var theQuote = quote.quoteText;
-        var author = quote.quoteAuthor;
-        $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
-        $quote.append($('<cite>').text('\u007E' + author));
-    });
+//     var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
+//     $.getJSON(call, function(quote) {
+//         var theQuote = quote.quoteText;
+//         var author = quote.quoteAuthor;
+//         $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
+//         $quote.append($('<cite>').text('\u007E' + author));
+//     });
     
     // Hide one element, display another one and do it smoothly
     function transitionSmoothly(toHide, toDisplay) {
@@ -536,7 +536,7 @@ $(function() {
               // 'some' is used instead of 'forEach' in order to break out of the loop at the first match
               // as it will be the only match anyways
               panels.some(function(panel) {
-                  if(e.key === panel[0]) {
+                  if(e.key == panel[0]) {
                       renderPanel(panel[0], panel[1], panel[2]);
                       return true;
                   }
