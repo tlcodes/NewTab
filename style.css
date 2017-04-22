@@ -8,15 +8,23 @@ body {
     color: white;
     text-shadow: 1px 1px 5px darkgray;   
     font-size: 75%;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position: relative;
 }
 
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?nqquoz');
-  src:  url('fonts/icomoon.eot?nqquoz#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?nqquoz') format('truetype'),
-    url('fonts/icomoon.woff?nqquoz') format('woff'),
-    url('fonts/icomoon.svg?nqquoz#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?h8p1qu');
+  src:  url('fonts/icomoon.eot?h8p1qu#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?h8p1qu') format('truetype'),
+    url('fonts/icomoon.woff?h8p1qu') format('woff'),
+    url('fonts/icomoon.svg?h8p1qu#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -36,6 +44,144 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-tornado:before {
+  content: "\e901";
+}
+.icon-tropical-storm:before {
+  content: "\e902";
+}
+.icon-hurricane:before {
+  content: "\e903";
+}
+.icon-severe-thunderstorms:before {
+  content: "\e904";
+}
+.icon-thunderstorms:before {
+  content: "\e905";
+}
+.icon-mixed-rain-snow:before {
+  content: "\e906";
+}
+.icon-mixed-rain-sleet:before {
+  content: "\e907";
+}
+.icon-mixed-snow-sleet:before {
+  content: "\e908";
+}
+.icon-freezing-drizzle:before {
+  content: "\e909";
+}
+.icon-drizzle:before {
+  content: "\e90a";
+}
+.icon-freezing-rain:before {
+  content: "\e90b";
+}
+.icon-shower-drizzle:before {
+  content: "\e90c";
+}
+.icon-shower-rain:before {
+  content: "\e90d";
+}
+.icon-snow-flurries:before {
+  content: "\e90e";
+}
+.icon-light-scattered-snow-showers:before {
+  content: "\e90f";
+}
+.icon-blowing-snow:before {
+  content: "\e910";
+}
+.icon-snow:before {
+  content: "\e911";
+}
+.icon-hail:before {
+  content: "\e912";
+}
+.icon-sleet:before {
+  content: "\e913";
+}
+.icon-dust:before {
+  content: "\e914";
+}
+.icon-fog:before {
+  content: "\e915";
+}
+.icon-haze:before {
+  content: "\e916";
+}
+.icon-smoky:before {
+  content: "\e917";
+}
+.icon-blustery:before {
+  content: "\e918";
+}
+.icon-windy:before {
+  content: "\e919";
+}
+.icon-cold:before {
+  content: "\e91a";
+}
+.icon-cloudy:before {
+  content: "\e91b";
+}
+.icon-mostly-cloudy-night:before {
+  content: "\e91c";
+}
+.icon-mostly-cloudy-day:before {
+  content: "\e91d";
+}
+.icon-partly-cloudy-night:before {
+  content: "\e91e";
+}
+.icon-partly-cloudy-day:before {
+  content: "\e91f";
+}
+.icon-clear-night:before {
+  content: "\e920";
+}
+.icon-sunny:before {
+  content: "\e921";
+}
+.icon-fair-night:before {
+  content: "\e922";
+}
+.icon-fair-day:before {
+  content: "\e923";
+}
+.icon-mixed-rain-hail:before {
+  content: "\e924";
+}
+.icon-hot:before {
+  content: "\e925";
+}
+.icon-isolated-thunderstorms:before {
+  content: "\e926";
+}
+.icon-scattered-thunderstorms:before {
+  content: "\e927";
+}
+.icon-scattered-thunderstorms2:before {
+  content: "\e928";
+}
+.icon-scattered-showers:before {
+  content: "\e929";
+}
+.icon-heavy-shower-snow:before {
+  content: "\e92a";
+}
+.icon-unavailable:before {
+  content: "\e92b";
+}
+.icon-thundershowers:before {
+  content: "\e92c";
+}
+.icon-snow-showers:before {
+  content: "\e92d";
+}
+.icon-isolated-thunderstorms2:before {
+  content: "\e92e";
+}
 .icon-tree-lizard:before {
   content: "\e900";
 }
@@ -131,6 +277,16 @@ body {
     z-index: 5;
 }
 
+.wicon {
+    vertical-align: middle;
+}
+
+.weather .wicon {
+    font-size: 1.5em;
+}
+
+
+/*
 .weather img {
     width: 30px;
     vertical-align: middle;
@@ -138,10 +294,14 @@ body {
     left: 0;
 }
 
+*/
+
 .weather p:first-of-type {
     margin-top: 15px;
     
 }
+
+
 
 .weather p {
     margin: 5px;
@@ -161,10 +321,16 @@ body {
     padding: 5px;
 }
 
+.weatherForecast .wicon {
+    font-size: 2em;
+}
+
+/*
 .weatherForecast img {
     width: 30px;
     vertical-align: middle;
 }
+*/
 
 .weatherForecast table {
     border-collapse: collapse;
@@ -206,7 +372,7 @@ body {
     display: inline-block;
     text-align: center;
     color: white;
-    margin-top: 17em;
+/*     margin-top: 17em; */
     cursor: pointer;
 }
 
@@ -445,7 +611,7 @@ blockquote {
     font-size: 1.3em;
     font-style: italic;
     max-width:50%;
-    margin:auto;
+/*     margin:auto; */
 }
    
 blockquote cite {
@@ -508,7 +674,7 @@ blockquote cite {
     width: 2em;
     height: 2em;
     font-size: 1.5em;
-    right: 0.5em;
+    right: 0.7em;
     color: lightgray;
     border: 2px solid lightgray;
     border-radius: 50%;
