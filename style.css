@@ -502,11 +502,14 @@ input:-webkit-autofill {
   opacity: 0;
   vertical-align: middle;
   cursor: pointer;
+  position: absolute;
+  top: 5px;
+  left: 0;
 }
 
 .submittedGoalContainer input[type="checkbox"] + label {
   cursor: pointer;  
-  margin-left: 24px;
+/*   margin-left: 24px; */
 }
 
 /* Using ::before and ::after pseudo-elements to customize checkbox appearance */
