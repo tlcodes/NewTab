@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>New Tab</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400">
+  <script src="jquery-3.2.0.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+    <div id="weatherBox">
+        <div class="weather"></div>
+        <div class="weatherForecast">
+                <table >
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Low</th>
+                            <th scope="col">High</th>
+                            <th scope="col">Weather</th>
+                        </tr>
+                    </thead>
+                    <tbody class="forecast">
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Temperature Units:</td>
+                            <td class="fahrenheit">Fahrenheit</td>
+                            <td class="celsius">Celsius</td>
+                        </tr>
+                    </tfoot>
+                </table>
+          </div>
+    </div>
+    <div class="settings">
+        <div id="settingIcon">
+            <span class="icon-cog cog"></span>
+        </div>
+        <div id="settingList">
+            <ul>
+                <li>SHOW:</li>
+                <li class="setWeather">Weather</li>
+                <li class="setGoal">Goal</li>
+                <li class="setQuote">Quote</li>
+                <li class="setTodo">Todo</li>
+            </ul>
+        </div>
+    </div>
+  <div class="time">
+    <p class="date"></p>
+    <p class="clock"></p>
+<!--     <p class="usclock hide"></p> -->
+  </div>
+  <div class="todaysGoal">
+    <div class="goalPrompt">
+      <p>What is your goal for today?</p>
+      <form class="mainForm">
+        <input type="text" name="goal" placeholder="_________________________________" autocomplete="off">
+      </form>
+    </div>
+    <div class="submittedGoalContainer">
+      <p>My goal for today:</p>
+      <fieldset>
+        <p>
+          <input type="checkbox" id="submittedGoal" value="">
+          <label for="submittedGoal"><span></span></label>
+          <button type="button" id="removeDailyGoal"><span class="icon-cancel-circle"></span></button>
+        </p>
+      </fieldset>
+    </div>
+  </div>
+  <blockquote></blockquote>
+    <div id="credits">
+        <div class="team">
+            <p><span class="icon-tree-lizard"></span> Tree Lizards</p>
+            <p>Tariel Laelius <a href="https://github.com/tariellaelius/"><span class="icon-github"></span></a></p>
+            <p>Tom Leroy <a href="https://github.com/tlcodes/"><span class="icon-github"></span></a></p>
+        </div>
+        <div class="creditIcon">
+            <span class="icon-embed2"></span>
+        </div>
+    </div>
+  <div class="to-do">
+  <div class="listContainer">
+  <ul class="to-do-list">
+  </ul>  
+  <form id="noteForm">
+  <input type="text" name="addNote" class="addNote" id="addNote" placeholder="Type and hit Enter to save" autocomplete="off">
+  </form>
+  </div>
+  </div>  
+  <button type="button" class="showList" id="showList"><span class="icon-list"></button>
+</body>
+</html>
