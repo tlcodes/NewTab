@@ -213,8 +213,6 @@ $(function() {
         var goal = $goalInput.val();
         if(goal) {                  // ensure that the input is not empty
             chrome.storage.local.set({'mainGoal': { text: goal, checked: false }});     // store the input text
-            $submittedGoalSpan.text(goal);
-            transitionSmoothly($goalPrompt, $submittedGoalContainer);
         }        
     });
     
@@ -222,11 +220,6 @@ $(function() {
     $('#removeDailyGoal').on('click', function() {
         $goalInput.val('');
         chrome.storage.local.set({'mainGoal': ''});    // remove the daily focus text from the storage
-        transitionSmoothly($submittedGoalContainer, $goalPrompt);
-        setTimeout(function() {                         // set the checkbox contents to nothing and reset its 'checked' property after enough time has passed, allowing the
-            $submittedGoalSpan.text('');// containing div to disappear
-            $submittedGoal.prop('checked', false);
-        }, 1000);
     });    
     
     
@@ -292,41 +285,8 @@ $(function() {
           //             let test = {[panel[0]] : state};
           //             console.log(test);
       });
-  });
-  
-  // toggle settings choices
-  // Show/hide weather
-  //     $('.setWeather').on('click', function() {
-  //         $('.setWeather').toggleClass('choice');
-  //         $('#weatherBox').toggleClass('hide');
-  //         // get temp choice and store it
-  //         var hideWeather = $('.setWeather').hasClass('choice');        
-  //         chrome.storage.local.set({'hideWeather': hideWeather});
-  //     });
-  //     // Show/hide main goal
-  //     $('.setGoal').on('click', function() {
-  //         $('.setGoal').toggleClass('choice');
-  //         $('.todaysGoal').toggleClass('hide');
-  //         // get temp choice and store it
-  //         var hideGoal = $('.setGoal').hasClass('choice');        
-  //         chrome.storage.local.set({'hideGoal': hideGoal});
-  //     });
-  //     // Show/Hide quote
-  //     $('.setQuote').on('click', function() {
-  //         $('.setQuote').toggleClass('choice');
-  //         $('blockquote').toggleClass('hide');
-  //         // get temp choice and store it
-  //         var hideQuote = $('.setQuote').hasClass('choice');        
-  //         chrome.storage.local.set({'hideQuote': hideQuote});
-  //     });
-  //     // Show/Hide todo list
-  //     $('.setTodo').on('click', function() {
-  //         $('.setTodo').toggleClass('choice');
-  //         $('#showList').toggleClass('hide');
-  //         // get temp choice and store it
-  //         var hideTodo = $('.setTodo').hasClass('choice');        
-  //         chrome.storage.local.set({'hideTodo': hideTodo});
-  //     });
+  }); 
+
   
   // Toggle clock to 12 and 24 hour mode
   $('.time').on('click', function() {
@@ -388,75 +348,27 @@ $(function() {
   // Show/hide panels on page load
   panels.forEach(function(panel) {
       renderPanel(panel[0], panel[1], panel[2]);
-  });
-  
-  
-/*     
-  // Show/Hide weather on page load
-  chrome.storage.local.get('showWeather', function(obj) {
-      if (obj.showWeather) {
-          $('#weatherBox').removeClass('hide');
-          $('.setWeather').addClass('choice');
-          
-      } else {
-          $('#weatherBox').addClass('hide');
-          $('.setWeather').removeClass('choice');
-      }
-  });
-  
-  
-  // Show/Hide Goal on page load
-  chrome.storage.local.get('showGoal', function(obj) {
-      if (obj.showGoal) {
-          $('.todaysGoal').removeClass('hide');
-          $('.setGoal').addClass('choice');
-      } else {
-          $('.todaysGoal').addClass('hide');
-          $('.setGoal').removeClass('choice');
-      }
-  });
-  
-  
-      
-  // Show/Hide Quote on page load
-  chrome.storage.local.get('showQuote', function(obj) {
-      if (obj.showQuote) {
-          $('blockquote').removeClass('hide');
-          $('.setQuote').addClass('choice');
-          
-      } else {
-          $('blockquote').addClass('hide');
-          $('.setQuote').removeClass('choice');
-      }
-  });
-  
-  // Show/Hide Quote on page load
-  chrome.storage.local.get('showTodo', function(obj) {
-      if (obj.showTodo) {
-          $('#showList').removeClass('hide');
-          $('.setTodo').addClass('choice');
-      } else {
-          $('#showList').addClass('hide');
-          $('.setTodo').removeClass('choice');
-      }
-  });
-*/  
+  });  
+
 
   function showDailyGoal(obj) {        
       if(obj && obj.text) {                         // if there is already a stored text, display it            
           $submittedGoalSpan.text(obj.text);          
           $submittedGoal.prop('checked', obj.checked);
           transitionSmoothly($goalPrompt, $submittedGoalContainer);
-      } else {      // otherwise, display the prompt
-          $submittedGoalSpan.text('');
-          $submittedGoal.prop('checked', false);            
+      } else {      // otherwise, display the prompt          
           transitionSmoothly($submittedGoalContainer, $goalPrompt);
+          setTimeout(function() {                         // set the checkbox contents to nothing and reset its 'checked' property after enough time has passed, allowing the
+              $submittedGoalSpan.text('');// containing div to disappear
+              $submittedGoal.prop('checked', false);
+          }, 1000);
       }
   }
   
   
   var $listContainer = $('.to-do .listContainer');
   var $showList = $("#showList");
+  var $addNote = $('#addNote');
   
   $showList.on('click', function() {    
       let currentLeft = $listContainer.css("left");
@@ -472,7 +384,7 @@ $(function() {
           newLeft = '0px';
           $showList.css('right', '7.6em');
           setTimeout(function() {
-              $('#addNote').focus();
+              $addNote.focus();
           }, 700);
           $('.to-do').css('visibility', 'visible');
       }
@@ -517,9 +429,8 @@ $(function() {
               list.forEach(addItem);        
           }
       });        
-  }
+  } 
   
-  var $addNote = $('#addNote');
   
   $('#noteForm').on('submit', function(event) {
       event.preventDefault();
@@ -527,17 +438,6 @@ $(function() {
       list.push({ text: text, checked: false });
       chrome.storage.local.set({'list': list});             
       $addNote.val('');        
-  }); 
-    
-    
-    var $extNote = $('#extNote');
-  
-  $('#extNoteForm').on('submit', function(event) {
-      event.preventDefault();
-      let text = $extNote.val();
-      list.push({ text: text, checked: false });
-      chrome.storage.local.set({'list': list});             
-      $extNote.val('');        
   }); 
 
     
