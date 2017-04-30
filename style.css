@@ -401,8 +401,7 @@ body {
 
 /* Main Focus and Goal Prompt */
 
-.todaysGoal {
-    margin-top: 5em;
+.todaysGoal {    
     width: 60%;
 }
 
@@ -482,8 +481,15 @@ input:-webkit-autofill {
 .submittedGoalContainer {
     display: none;
     opacity: 0;
-    text-align: center;
-    transition: opacity 1s;
+    text-align: center;        
+    transition: all 0.5s linear;
+    border-radius: 1em;
+    padding-top: 2px;
+}
+
+.submittedGoalContainer:hover {
+    background-color: rgba(68, 68, 68, 0.8);
+    transition: all 0.5s linear;
 }
 
 .submittedGoalContainer fieldset {
@@ -614,8 +620,24 @@ blockquote {
     text-align: center;
     font-size: 1.3em;
     font-style: italic;
-    max-width:50%;
-/*     margin:auto; */
+    max-width:50%;      
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    transition: all 0.5s linear;
+}
+
+blockquote:hover {
+    background-color: rgba(68, 68, 68, 0.8);
+    transition: all 0.5s linear;
+}
+
+blockquote a:link,
+blockquote a:hover,
+blockquote a:active,
+blockquote a:visited {
+    color: white;
+    text-decoration: none;
+    text-shadow: 0 0 1.4em black;
 }
    
 blockquote cite {
