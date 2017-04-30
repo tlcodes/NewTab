@@ -2,7 +2,7 @@ MIT License
 
 
 
-Copyright for portions of this module (wikiquotes.js) are held by (c) 2013 [Nate Tyler](https://github.com/natetyler/wikiquotes-api).
+Copyright for portions of this module (wikiquotes-api.js) are held by (c) 2013 [Nate Tyler](https://github.com/natetyler/wikiquotes-api).
 
 All other copyright are held by (c) 2017 [Tariyel Hamidov](https://github.com/tariellaelius/wikiquotes-api)
 
