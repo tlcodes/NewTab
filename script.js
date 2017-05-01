@@ -217,15 +217,27 @@ $(function() {
         });
     } // end navigator.gelocation
     
+    // Using an external module (wikiquotes-api.js) to fetch a random quote from Wikiquotes    
+    var wiki = WikiquoteApi;
+    // Pages to fetch quotes from and the section names, where the quotes are published
+    var pages = [{title: 'Bertrand Russell', masks: ['^Quotes$']},
+  {title: 'Albert Camus', masks: ['^Quotes$']},
+  {title: 'Simone Weil', masks: ['^Quotes$']},  
+  {title: 'Stephen Hawking', masks: ['^Quotes$']},
+  {title: 'Paulo Coelho', masks: ['^Quotes$']},
+  {title: 'Marcus Aurelius', masks: ['^Quotes$']},
+  {title: 'Philosophy'}
+    ];
     
-    // Quotes from forismatic
-    var call = "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en";
-    $.getJSON(call, function(quote) {
-        var theQuote = quote.quoteText;
-        var author = quote.quoteAuthor;
-        $quote.append($('<div>').text('\u275D ' + theQuote + '\u275E'));
-        $quote.append($('<cite>').text('\u007E' + author));
-    });
+    var randomIndex = Math.floor(Math.random() * pages.length);
+    var randomPage = pages[randomIndex];
+    
+    wiki.getRandomQuote(randomPage, function(res) {
+        let a = '<a href="https://en.wikiquote.org/wiki/' + res.titles + '#' + res.anchor + '">' + res.quote + '</a>'; 
+        $quote.append($('<div></div>').html('\u275D ' + a + '\u275E'));
+    },
+    (err) => console.log(err));
+
     
     // Hide one element, display another one and do it smoothly
     function transitionSmoothly(toHide, toDisplay) {
