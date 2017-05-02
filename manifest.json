@@ -11,12 +11,12 @@
         "newtab": "index.html"
     },
     "browser_action": {
-          /*"default_icon": {                    // optional
-            "16": "images/icon16.png",           // optional
-            "24": "images/icon24.png",           // optional
-            "32": "images/icon32.png"            // optional
-          },*/
-          "default_title": "Add a ToDo Item",      // optional; shown in tooltip
-          "default_popup": "popup.html"        // optional
+          "default_icon": {
+            "16": "images/list16.png",
+            "24": "images/list24.png",
+            "32": "images/list32.png"
+          },
+          "default_title": "Add a ToDo Item",
+          "default_popup": "popup.html"
         }
 }
