@@ -4,6 +4,7 @@
     "version": "1.0",
     "description": "A new tab extension for Google Chrome",
    "permissions" : [
+        "https://*.wikiquote.org/*",
 	"geolocation",
 	"storage"
 	],
@@ -18,5 +19,6 @@
           },
           "default_title": "Add a ToDo Item",
           "default_popup": "popup.html"
+
         }
 }

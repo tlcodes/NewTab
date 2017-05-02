@@ -6,7 +6,16 @@ body {
     font-family: Lato, Helvetica;
     background-size: cover;
     color: white;
-    text-shadow: 1px 1px 5px darkgray;
+    text-shadow: 1px 1px 5px darkgray;   
+    font-size: 75%;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position: relative;
 }
 
 @font-face {
@@ -267,12 +276,16 @@ body {
     text-transform: uppercase;
     z-index: 5;
 }
+
 .wicon {
     vertical-align: middle;
 }
+
 .weather .wicon {
     font-size: 1.5em;
 }
+
+
 /*
 .weather img {
     width: 30px;
@@ -280,12 +293,15 @@ body {
     top: 0;
     left: 0;
 }
+
 */
 
 .weather p:first-of-type {
     margin-top: 15px;
     
 }
+
+
 
 .weather p {
     margin: 5px;
@@ -315,6 +331,7 @@ body {
     vertical-align: middle;
 }
 */
+
 .weatherForecast table {
     border-collapse: collapse;
 }
@@ -355,7 +372,7 @@ body {
     display: inline-block;
     text-align: center;
     color: white;
-    margin-top: 17em;
+/*     margin-top: 17em; */
     cursor: pointer;
 }
 
@@ -384,8 +401,8 @@ body {
 
 /* Main Focus and Goal Prompt */
 
-.todaysGoal {
-    margin-top: 5em;
+.todaysGoal {    
+    width: 60%;
 }
 
 .goalPrompt {
@@ -464,8 +481,15 @@ input:-webkit-autofill {
 .submittedGoalContainer {
     display: none;
     opacity: 0;
-    text-align: center;
-    transition: opacity 1s;
+    text-align: center;        
+    transition: all 0.5s linear;
+    border-radius: 1em;
+    padding-top: 2px;
+}
+
+.submittedGoalContainer:hover {
+    background-color: rgba(68, 68, 68, 0.8);
+    transition: all 0.5s linear;
 }
 
 .submittedGoalContainer fieldset {
@@ -485,11 +509,14 @@ input:-webkit-autofill {
   opacity: 0;
   vertical-align: middle;
   cursor: pointer;
+  position: absolute;
+  top: 5px;
+  left: 0;
 }
 
 .submittedGoalContainer input[type="checkbox"] + label {
   cursor: pointer;  
-  margin-left: 24px;
+  margin-left: 44px;
 }
 
 /* Using ::before and ::after pseudo-elements to customize checkbox appearance */
@@ -593,8 +620,24 @@ blockquote {
     text-align: center;
     font-size: 1.3em;
     font-style: italic;
-    max-width:50%;
-    margin:auto;
+    max-width:50%;      
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    transition: all 0.5s linear;
+}
+
+blockquote:hover {
+    background-color: rgba(68, 68, 68, 0.8);
+    transition: all 0.5s linear;
+}
+
+blockquote a:link,
+blockquote a:hover,
+blockquote a:active,
+blockquote a:visited {
+    color: white;
+    text-decoration: none;
+    text-shadow: 0 0 1.4em black;
 }
    
 blockquote cite {
@@ -657,7 +700,7 @@ blockquote cite {
     width: 2em;
     height: 2em;
     font-size: 1.5em;
-    right: 0.5em;
+    right: 0.7em;
     color: lightgray;
     border: 2px solid lightgray;
     border-radius: 50%;
