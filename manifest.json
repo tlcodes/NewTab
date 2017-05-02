@@ -9,5 +9,14 @@
 	],
     "chrome_url_overrides": {
         "newtab": "index.html"
-    }
+    },
+    "browser_action": {
+          "default_icon": {
+            "16": "images/list16.png",
+            "24": "images/list24.png",
+            "32": "images/list32.png"
+          },
+          "default_title": "Add a ToDo Item",
+          "default_popup": "popup.html"
+        }
 }

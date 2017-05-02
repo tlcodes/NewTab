@@ -528,8 +528,19 @@ $(function() {
       chrome.storage.local.set({'list': list});             
       $addNote.val('');        
   }); 
+    
+    
+    var $extNote = $('#extNote');
   
-  
+  $('#extNoteForm').on('submit', function(event) {
+      event.preventDefault();
+      let text = $extNote.val();
+      list.push({ text: text, checked: false });
+      chrome.storage.local.set({'list': list});             
+      $extNote.val('');        
+  }); 
+
+    
   $submittedGoal.on('change', function() {
       var that = this;
       chrome.storage.local.get('mainGoal', function(response) {
