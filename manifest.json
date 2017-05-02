@@ -19,6 +19,5 @@
           },
           "default_title": "Add a ToDo Item",
           "default_popup": "popup.html"
-
         }
 }
