@@ -147,7 +147,7 @@ var WikiquoteApi = (function() {
         var quoteArray = [] 
         
         // Find top level <li>s only
-        var $listItems = $(quotes).children('li');
+        var $listItems = $(quotes).children('ul').children('li');
         
         let size = $listItems.length;
         let randomNum = Math.floor(Math.random() * size);        
